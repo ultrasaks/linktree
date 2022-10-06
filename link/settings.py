@@ -4,8 +4,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-SECRET_KEY = 'django-insecure--het4ihvth-d9*9khzykov&u^kesbz2yhp3mh9kev#+vb4ho^x'
+with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
+    SECRET_KEY = key.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

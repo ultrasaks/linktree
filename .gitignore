@@ -3,4 +3,5 @@ link/secret_key.ini
 link/__pycache__
 show_app/__pycache__
 customing_app/__pycache__
+welcome_app/__pycache__
 db.sqlite3

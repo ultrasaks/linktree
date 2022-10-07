@@ -5,3 +5,5 @@ show_app/__pycache__
 customing_app/__pycache__
 welcome_app/__pycache__
 db.sqlite3
+.vscode
+venv

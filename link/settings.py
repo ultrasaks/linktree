@@ -1,8 +1,9 @@
 from pathlib import Path
-
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+AUTH_USER_MODEL = 'welcome_app.User'
 
 with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
     SECRET_KEY = key.read()
@@ -84,7 +85,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LOGIN_URL = '/login/'
+
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -93,7 +96,10 @@ USE_I18N = True
 USE_TZ = True
 
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [
+     os.path.join(BASE_DIR, "static"),
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

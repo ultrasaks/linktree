@@ -8,8 +8,8 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat your password', widget=forms.PasswordInput)
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -20,7 +20,7 @@ class UserRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError("Пароли не совпадают.")
         if re.search('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,})', cd['password']) is None:
-            raise forms.ValidationError("Пароль не содержит одного из символов")
+            raise forms.ValidationError("Пароль не содержит одного из перечисленных символов")
         return cd['password2']
 
 

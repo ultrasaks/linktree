@@ -30,9 +30,9 @@ nav .button {
     border-radius: 2rem;
     background-color: #172C38;
     color: #D0EEFF;
-    padding: 1rem 1.5rem;
+    padding: .8rem 1.7rem;
     font-weight: 700;
-    border: 0px;
+    border: .2rem solid transparent;
     text-decoration: none;
     transition-duration: .17s;
     cursor: pointer;
@@ -41,7 +41,7 @@ nav .button {
     background-color: #1C3746;
 }
 .button:active {
-    background-color: #61889D;
+    background-color: #1272a5;
 }
 
 .landing-welcome {
@@ -54,4 +54,59 @@ nav .button {
 }
 @media (min-width: 500px){
     .landing-welcome {font-size: 7rem}
+}
+
+.test1 {
+    display: flex;
+    justify-content: center;
+}
+.test2 {
+    background-color: #D0EEFF;
+    color: #172C38;
+    margin: 1rem 1.5rem;
+    padding: 1rem 1rem 5rem 1rem;
+    max-width: 650px;
+    width: 100%;
+    border-radius: 1rem;
+    position: relative;
+}
+.login-input {
+    margin-bottom: 1rem;
+    width: -webkit-fill-available;
+}
+input {
+    background-color: rgba(0, 0, 20, .17);
+    color: #122937;
+    outline: none;
+    border-radius: 1rem;
+    padding: .5rem 1rem;
+    border-color: #122937;
+    border-width: .2rem;
+    transition-duration: .17s;
+}
+input:focus {
+    background-color: rgba(0, 0, 20, .27);
+}
+label {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: .4rem;
+}
+.button-group {
+    position: absolute;
+    right: 1rem;
+}
+.button-light {
+    color: #172C38;
+    background-color: #D0EEFF;
+    border-color: #172C38;
+}
+.button-light:hover {
+    background-color: #ADC6D7;
+}
+.button-light:active {
+    background-color: #6F91A8;
+}
+.error-label {
+    color: #c91010;
 }

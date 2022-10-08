@@ -8,7 +8,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = UserRegistrationForm
     form = CUserChangeForm
     model = User
-    list_display = ('username', 'email', 'is_staff', 'is_active',)
+    list_display = ('username', 'email', 'is_staff', 'is_active', 'last_login',)
     list_filter = ('is_staff', 'is_active',)
     fieldsets = (
         ('Base information', {'fields': ('username', 'email', 'password',)}),

@@ -1,3 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="test1">
+    <div class="test2">
+        {% if errors != None %}
+        <b class="error-label">{{ errors }}</b>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label for="id_email">Email</label><br>
+                <input class="login-input" type="email" name="email" required id="id_email">
+            </p>
+
+            <p>
+                <label for="id_password">Пароль</label><br>
+                <input type="password" class="login-input" name="password" required id="id_password">
+            </p>
+
+            <p class="button-group">
+                <button class="button button-light" type="button" onclick="window.open('/signup','_self')">Создать</button>
+                <button type="submit" class="button">Войти</button>
+            </p>
+        </form>
+    </div>
+</div>
 {% endblock %}

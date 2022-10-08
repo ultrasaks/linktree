@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .helptext {
+        font-size: 80%;
+    }
+</style>
+<div class="test1">
+    <div class="test2">
+        {% if errors != None %}
+        <b class="error-label">{{ errors }}</b>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label for="id_username">Имя пользователя</label><br>
+                <input type="text" name="username" maxlength="50" required="" id="id_username"><br>
+                <span class="helptext">Не более 50 символов: буквы, цифры и @/./+/-/_ </span>
+            </p>
+
+            <p>
+                <label for="id_email">Email</label><br>
+                <input type="email" name="email" maxlength="254" required="" id="id_email">
+            </p>
+
+            <p>
+                <label for="id_password">Пароль</label><br>
+                <input type="password" name="password" required="" id="id_password"><br>
+                <span class="helptext">Пароль должен содержать минимум 6 символов: цифры и латинские буквы в мелкой и большой раскладке</span>
+            </p>
+
+            <p>
+                <label for="id_password2">Повторите пароль</label><br>
+                <input type="password" name="password2" required="" id="id_password2">  
+            </p>
+            <div style="height: 70px; width: 270px; background-color: black; color: white; font-weight: 900;">
+                CAPTCHA
+            </div>
+            <p class="button-group"> 
+                <button class="button button-light" type="button" onclick="window.open('/login','_self')">Войти</button>
+                <button type="submit" class="button">Создать</button>
+            </p>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@ with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [

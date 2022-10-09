@@ -43,7 +43,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     user_token = models.CharField(default=gen_token, max_length=40, unique=True)
-    # image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
 
     USERNAME_FIELD = 'email'

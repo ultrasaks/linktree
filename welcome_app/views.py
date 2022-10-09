@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, RegisterForm
 
 
 def form_error(form) -> str:
@@ -50,7 +50,7 @@ def register_view(request):
         return redirect('/')
     message = None
     if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
+        user_form = RegisterForm(request.POST)
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
@@ -58,8 +58,8 @@ def register_view(request):
             return redirect('/login')
         else:
             message = f'{form_error_name(user_form)}: {form_error(user_form)}'
-    user_form = UserRegistrationForm()
-    return render(request, 'signup.html', {'title': 'Вход', 'user_form': user_form, 'errors': message})
+    user_form = RegisterForm()
+    return render(request, 'signup.html', {'title': 'Регистрация', 'user_form': user_form, 'errors': message})
 
 
 @login_required

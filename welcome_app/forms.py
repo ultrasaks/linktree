@@ -7,7 +7,7 @@ class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
-class UserRegistrationForm(forms.ModelForm):
+class RegisterForm(forms.ModelForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
 
@@ -30,7 +30,7 @@ class UserEditForm(forms.ModelForm):
         fields = ('username', 'email',)
 
 
-class CUserRegForm(UserRegistrationForm):
+class CUserRegForm(RegisterForm):
     class Meta:
         model = User
         fields = ('email', 'username',)

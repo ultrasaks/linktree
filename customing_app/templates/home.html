@@ -1,3 +1,67 @@
-{% include 'base.html' %}
+{% include 'baza.html' %}
+
+{% block header %}
+<div style="margin: 0;width: 100%;background-color: white;height: 2rem;position: fixed;left: 0;top: 0;z-index: 555;">
+    <a href="/logout" style="position: absolute; right: 0;">Выйти</a>
+</div>
+<style>
+    html {
+        color: #D0EEFF;
+    }
+</style>
+{% endblock %}
 {% block content %}
+
+<div style="margin-top: 3rem">
+{% if not profile %}
+    <h1 style="font-size: 230%;">Пара моментов</h1>
+    <div style="display: flex; justify-content: center;">
+        <div class="test2">
+            <h3>Чтобы продолжить, вам необходимо заполнить информацию о профиле</h4>
+            <form id="create-profile">
+                {% csrf_token %}
+                <p>
+                    <label for="id_username">Имя</label><br>
+                    <input type="text" id="id_username" name="id_username" class="login-input">
+                </p>
+                <p>
+                    <label for="id_about">Описание</label><br>
+                    <input type="text" id="id_about" name="id_about" class="login-input">
+                </p>
+                <p class="button-group">
+                    <button type="submit" class="button">Продолжить</button>
+                </p>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <h1>У вас есть профиль</h1>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).on('submit','#create-profile',function(e){
+        e.preventDefault();
+    
+        $.ajax({
+          type:'POST',
+          url:'/profile/create/',
+          data:{
+              username: $('#id_username').val(),
+              about: $('#id_about').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          success: function(data){
+            window.open('/', '_self');
+          },
+          error: function(data){
+            alert('куда прёшь');
+            console.log(data);
+          }
+        });
+      });
+</script>
 {% endblock %}

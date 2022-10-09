@@ -40,3 +40,5 @@ class CUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('email', 'username',)
+
+

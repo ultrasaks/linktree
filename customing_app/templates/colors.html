@@ -1,0 +1,32 @@
+{% extends 'baza.html' %}
+{% block content %}
+
+{% if scheme == None %}
+<style>
+    .edit-link {
+        text-decoration: none;
+        color: #273d49;
+        text-align: center;
+    }
+</style>
+<h1 class="edit-heading">Ещё чуть-чуть</h1>
+<div class="center-div">
+    <div class="test2">
+        <h3>Выберите цветовую схему</h3>
+        <a href="#" class="edit-link login-input">
+            <p>
+                Стандартная
+            </p>
+        </a>
+        <a href="#" class="edit-link login-input">
+            <p>
+                Моя собственная
+            </p>
+        </a>
+    </div>
+</div>
+{% else %}
+<h1>Дизайн</h1>
+{% endif %}
+
+{% endblock %}

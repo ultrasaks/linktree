@@ -110,3 +110,10 @@ label {
 .error-label {
     color: #c91010;
 }
+.center-div {
+    display: flex; 
+    justify-content: center;
+}
+.edit-heading {
+    font-size: 230%;
+}

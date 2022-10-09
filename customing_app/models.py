@@ -21,6 +21,12 @@ class Profile(models.Model):
     
     def get_links(self):
         return Link.objects.filter(user_profile=self)
+    
+
+    class Meta:
+        db_table = 'Profiles'
+        verbose_name = 'профиль'
+        verbose_name_plural = 'профили'
 
 
 class Link(models.Model):
@@ -32,9 +38,16 @@ class Link(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    class Meta:
+        db_table = 'Links'
+        verbose_name = 'ссылка'
+        verbose_name_plural = 'ссылки'
 
 
 class ColorScheme(models.Model):
+    owner = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE, blank=True, null=True)
+
     background = models.CharField(max_length=8, default='#15151E')
     font = models.CharField(max_length=8, default='#15151E')
     card = models.CharField(max_length=8, default='#15151E')
@@ -44,5 +57,10 @@ class ColorScheme(models.Model):
     button_hover = models.CharField(max_length=8, default='#15151E')
     button_click = models.CharField(max_length=8, default='#15151E')
     #TODO: продумать
+
+    class Meta:
+        db_table = 'ColorScheme'
+        verbose_name = 'цветовая схема'
+        verbose_name_plural = 'цветовые схемы'
 
 

@@ -9,11 +9,24 @@
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
     </head>
     <body>
+        <div style="margin: 0;width: 100%;background-color: white;height: 2rem;position: fixed;left: 0;top: 0;z-index: 555;">
+            <a href="/profile/">P</a>
+            <a href="/profile/colors/">C</a>
+            <a href="/profile/links/">L</a>
+            <a href="/logout" style="position: absolute; right: 0;">Выйти</a>
+        </div>
+        <style>
+            html {
+                color: #D0EEFF;
+            }
+        </style>
         {% block header %}
         {% endblock %}
-        {% block content %}
-        {% endblock %}
-        
+        <div style="margin-top: 3rem">
+            {% block content %}
+            {% endblock %}
+        </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         {% block scripts %}
         {% endblock %}

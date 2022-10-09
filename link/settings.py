@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +12,7 @@ with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] #? 'mylink.pythonanywhere.com'
 
 
 INSTALLED_APPS = [
@@ -103,3 +104,8 @@ STATICFILES_DIRS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+with open(f'{BASE_DIR}/link/icons.json', 'r') as icons:
+    #! copyright - github.com/tabler/tabler-icons
+    BRAND_ICONS = json.loads(icons.read())
+

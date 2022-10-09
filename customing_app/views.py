@@ -1,25 +1,38 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Profile
+from .models import Profile, ColorScheme
 from .forms import ProfileForm
 
 import json
 
 @login_required
 def home(request):
-    profile = Profile.objects.filter(owner=request.user)
+    profile = Profile.objects.filter(owner=request.user).first()
     return render(request, 'home.html', {'title': 'Настройка профиля', 'profile': profile})
 
 
 @login_required
 def links(request):
-    if not Profile.objects.filter(owner=request.user):
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile is None:
         return redirect('/')
-    return render(request, 'home.html', {'title': 'Настройка ссылок'})
+    # if profile.colors is None:
+    #     return redirect('/profile/colors/')
+    return render(request, 'links.html', {'title': 'Настройка ссылок'})
+
+
+@login_required
+def colors(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile is None:
+        return redirect('/')
+    color_scheme = ColorScheme.objects.filter(owner=profile).first()
+    return render(request, 'colors.html', {'title': 'Настройка дизайна', 'scheme': color_scheme})
 
 
 
+#TODO: перенести в REST
 @login_required
 def create_profile(request):
     to_return = {}

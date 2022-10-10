@@ -9,4 +9,11 @@ class ProfileAdmin(admin.ModelAdmin):
     list_filter = tuple()
 
 
+class SchemeAdmin(admin.ModelAdmin):
+    model = ColorScheme
+    list_display = ('owner',)
+    list_filter = tuple()
+
+
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(ColorScheme, SchemeAdmin)

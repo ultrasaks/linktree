@@ -48,19 +48,25 @@ class Link(models.Model):
 class ColorScheme(models.Model):
     owner = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE, blank=True, null=True)
 
-    background = models.CharField(max_length=8, default='#15151E')
-    font = models.CharField(max_length=8, default='#15151E')
+    background = models.CharField(max_length=8, default='#172C38')
+    font = models.CharField(max_length=8, default='#FFFFFF')
     card = models.CharField(max_length=8, default='#15151E')
     
-    button = models.CharField(max_length=8, default='#15151E')
-    button_font = models.CharField(max_length=8, default='#15151E')
-    button_hover = models.CharField(max_length=8, default='#15151E')
-    button_click = models.CharField(max_length=8, default='#15151E')
+    button = models.CharField(max_length=8, default='#172C38')
+    button_font = models.CharField(max_length=8, default='#D0EEFF')
+    button_hover = models.CharField(max_length=8, default='#1C3746')
+    button_click = models.CharField(max_length=8, default='#1272a5;')
     #TODO: продумать
 
     class Meta:
         db_table = 'ColorScheme'
-        verbose_name = 'цветовая схема'
+        verbose_name = 'цветовую схему'
         verbose_name_plural = 'цветовые схемы'
+    
+    def __str__(self) -> str:
+        return f'Схема {self.owner.name}'
+
+    def get_colors(self) -> list:
+        return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
 
 

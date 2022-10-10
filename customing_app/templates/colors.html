@@ -1,25 +1,47 @@
 {% extends 'baza.html' %}
 {% block content %}
 
-{% if scheme == None %}
 <style>
     .edit-link {
         text-decoration: none;
         color: #273d49;
         text-align: center;
+        cursor: pointer;
+    }
+    .edit-p {
+        transition-duration: .17s;
+        padding: 1rem 0rem;
+        margin: 0;
+        border-radius: .5rem;
+    }
+    .edit-p:hover {
+        background-color: rgb(39, 39, 66, .07);
+    }
+    .edit-p:focus {
+        background-color: rgb(39, 39, 66, .11);
+    }
+    .color-preview {
+        border: 1px white solid; 
+        width: 20px; 
+        height: 20px; 
+        margin-right: .2rem;
+        border-radius: .25rem;
     }
 </style>
+
+{% if scheme == None %}
+
 <h1 class="edit-heading">Ещё чуть-чуть</h1>
 <div class="center-div">
     <div class="test2">
         <h3>Выберите цветовую схему</h3>
-        <a href="#" class="edit-link login-input" id="emp">
-            <p>
+        <a class="edit-link login-input" id="emp">
+            <p class="edit-p">
                 Стандартная
             </p>
         </a>
-        <a href="#" class="edit-link login-input" id="own">
-            <p>
+        <a class="edit-link login-input" id="own">
+            <p class="edit-p">
                 Моя собственная
             </p>
         </a>
@@ -27,12 +49,17 @@
 </div>
 {% else %}
 <h1>Дизайн</h1>
+<div style="display: flex;">
+    {% for color in scheme.get_colors %}
+    <div style="background-color: {{color}};" class="color-preview"></div>
+    {% endfor %}
+</div>
 {% endif %}
 
 {% endblock %}
 
 {% block scripts %}
-
+{% if scheme == None %}
 <script>
     function create_empty() {
         $.ajax({
@@ -50,4 +77,5 @@
         window.open('/profile/colors', '_self');
     })
 </script>
+{% endif %}
 {% endblock %}

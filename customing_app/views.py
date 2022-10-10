@@ -53,6 +53,26 @@ def create_profile(request):
     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
     
+@login_required
+def create_scheme(request):
+    to_return = {}
+
+    print(1)
+
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile is None:
+        to_return['message'] = 'Your account already has a profile'
+    elif profile.colors is not None:
+        to_return['message'] = 'Your profile already has a color scheme'
+    else:
+        new_scheme = ColorScheme(owner=profile)
+        new_scheme.save()
+        profile.colors = new_scheme
+        profile.save()
+
+        to_return['message'] = 'Success!'
+        return HttpResponse(json.dumps(to_return), content_type="application/json")
+    return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
 
 # яркость определяется по HSV(v)

@@ -7,4 +7,5 @@ urlpatterns = [
     path('colors/', views.colors),
 
     path('create/', views.create_profile),
+    path('colors/create/', views.create_scheme),
 ]

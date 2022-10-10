@@ -13,12 +13,12 @@
 <div class="center-div">
     <div class="test2">
         <h3>Выберите цветовую схему</h3>
-        <a href="#" class="edit-link login-input">
+        <a href="#" class="edit-link login-input" id="emp">
             <p>
                 Стандартная
             </p>
         </a>
-        <a href="#" class="edit-link login-input">
+        <a href="#" class="edit-link login-input" id="own">
             <p>
                 Моя собственная
             </p>
@@ -29,4 +29,25 @@
 <h1>Дизайн</h1>
 {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    function create_empty() {
+        $.ajax({
+          type:'GET',
+          url:'/profile/colors/create/',
+        });
+    }
+
+    $("#emp").click(function() {
+        create_empty();
+        window.open('/profile/links', '_self');
+    })
+    $("#own").click(function() {
+        create_empty();
+        window.open('/profile/colors', '_self');
+    })
+</script>
 {% endblock %}

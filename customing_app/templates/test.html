@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ profile.name }}</title>
+        <meta name="description" content="{{ profile.about }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+            html {
+                background-color: {{ scheme.background }};
+                color: {{ scheme.font }};
+                font-family: 'Noto Sans';
+            }
+            .center-display {
+                display: flex;
+                justify-content: center;
+                padding: 1rem;
+            }
+            .card {
+                background-color: {{ scheme.card }};
+                padding: 1rem 2rem;
+                max-width: 500px;
+                border-radius: 1rem;
+                position: relative;
+            }
+            .button {
+                border-radius: 2rem;
+                background-color: {{ scheme.button }};
+                color: {{scheme.button_font}};
+                padding: .8rem 1.7rem;
+                font-weight: 700;
+                border: .2rem solid transparent;
+                text-decoration: none;
+                transition-duration: .17s;
+                cursor: pointer;
+            }
+            .button:hover {
+                background-color: {{ scheme.button_hover }};
+            }
+            .button:active {
+                background-color: {{ scheme.button_click }};;
+            }
+        </style>
+        
+        <div class="center-display">
+            <div class="card">
+                <center>
+                    <div style="border-radius: 100%; background-color: grey; width: 5rem; height: 5rem"></div>
+                </center>
+                <h3 class="center-display" style="margin-top: 0;">
+                    Hello friend
+                </h3>
+            </div>
+        </div>
+        <center>
+            <div style="max-width: 900px;">
+                {% for _ in urls %}
+                <a class="button" style="width:100%; display:block;max-width: -webkit-fill-available; margin-bottom: .3rem">My twitch</a>
+                {% endfor %}
+            </div>
+        </center>
+
+    </body>
+</html>

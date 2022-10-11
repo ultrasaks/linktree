@@ -1,4 +1,5 @@
 from django.db import models
+import re
 
 
 class Profile(models.Model):
@@ -69,4 +70,8 @@ class ColorScheme(models.Model):
     def get_colors(self) -> list:
         return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
 
-
+    def check_color(self, color: str) -> bool:
+        is_ok = re.search(r'^#[A-Fa-f0-9]{6}$', color)
+        if is_ok is None:
+            return False
+        return True

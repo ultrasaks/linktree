@@ -30,6 +30,17 @@ def colors(request):
     color_scheme = ColorScheme.objects.filter(owner=profile).first()
     return render(request, 'colors.html', {'title': 'Настройка дизайна', 'scheme': color_scheme})
 
+@login_required
+def link_test(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile is None:
+        return redirect('/')
+    color_scheme = ColorScheme.objects.filter(owner=profile).first()
+    if color_scheme is None:
+        return redirect('/profile/colors/')
+    urls_test = ['' for _ in range(10)]
+    return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'urls': urls_test})
+
 
 
 #TODO: перенести в REST

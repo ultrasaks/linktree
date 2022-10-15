@@ -1,0 +1,28 @@
+{% extends 'baza.html' %}
+
+{% block content %}
+    <input type="hidden" id="color_obj">
+    {% for color_id, color in scheme.get_colors_plural.items %}
+        <div style="display: flex; margin: 1rem 0px">
+            <a id="{{color_id}}">{{color_id}}</a>
+            <div style="background-color: {{color}};" class="color-preview"></div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function change_color(color_id) {
+        $("#color_obj").value = color_id;
+    }
+    // TODO: пофиксить color_name
+    const color_objects = ["background", "font", "card", "button", "button_hover", "button_click", "button_font"]
+    for (var color_obj in color_objects) {
+        var color_name = String(color_objects[color_obj])
+        $("#"+color_name).click(function() { 
+            console.log("#"+color_name)
+            change_color(color_name);
+        });
+    }
+</script>
+{% endblock  %}

@@ -6,6 +6,7 @@ urlpatterns = [
     path('links/', views.links),
     path('colors/', views.colors),
 
+    path('colors/edit/', views.colors_edit),
     path('colors/test/', views.link_test),
 
     path('create/', views.create_profile),

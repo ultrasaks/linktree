@@ -2,9 +2,11 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Profile, ColorScheme
-from .forms import ProfileForm
+from .forms import ProfileForm, ColorForm
+from .decorators import profile_required, scheme_required
 
 import json
+
 
 @login_required
 def home(request):
@@ -13,32 +15,38 @@ def home(request):
 
 
 @login_required
+@scheme_required
 def links(request):
-    profile = Profile.objects.filter(owner=request.user).first()
-    if profile is None:
-        return redirect('/')
-    # if profile.colors is None:
-    #     return redirect('/profile/colors/')
+    # profile = Profile.objects.filter(owner=request.user).first()
     return render(request, 'links.html', {'title': 'Настройка ссылок'})
 
 
 @login_required
+@profile_required
 def colors(request):
     profile = Profile.objects.filter(owner=request.user).first()
-    if profile is None:
-        return redirect('/')
-    color_scheme = ColorScheme.objects.filter(owner=profile).first()
+    color_scheme = profile.colors
     return render(request, 'colors.html', {'title': 'Настройка дизайна', 'scheme': color_scheme})
 
+
 @login_required
-def link_test(request):
+@scheme_required
+def colors_edit(request):
+    # !!!TODO: пофиксить color_name
     profile = Profile.objects.filter(owner=request.user).first()
-    if profile is None:
-        return redirect('/')
-    color_scheme = ColorScheme.objects.filter(owner=profile).first()
-    if color_scheme is None:
-        return redirect('/profile/colors/')
+    color_scheme = profile.colors
+    return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme})
+    
+
+
+@login_required
+@scheme_required
+def link_test(request):
     urls_test = ['' for _ in range(10)]
+
+    profile = Profile.objects.filter(owner=request.user).first()
+    color_scheme = profile.colors
+
     return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'urls': urls_test})
 
 
@@ -68,8 +76,6 @@ def create_profile(request):
 def create_scheme(request):
     to_return = {}
 
-    print(1)
-
     profile = Profile.objects.filter(owner=request.user).first()
     if profile is None:
         to_return['message'] = 'Your account already has a profile'
@@ -85,5 +91,51 @@ def create_scheme(request):
         return HttpResponse(json.dumps(to_return), content_type="application/json")
     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
+
+
+@login_required
+def edit_scheme(request):
+    to_return = {}
+
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile is None:
+        to_return['message'] = 'Your account already has a profile'
+    elif profile.colors is None:
+        to_return['message'] = "Your profile don't have a color scheme"
+
+    else:
+        form = ColorForm(request.POST)
+        if form.is_valid():
+            scheme = profile.colors
+            cd = form.cleaned_data
+
+            match cd['to_change']:
+                case "background":
+                    scheme.background = cd["color"]
+                case "font":
+                    scheme.font = cd["color"]
+                case "card":
+                    scheme.card = cd["color"]
+                case "button":
+                    scheme.button = cd["color"]
+                case "button_hover":
+                    scheme.button_hover = cd["color"]
+                case "button_click":
+                    scheme.button_click = cd["color"]
+                case "button_font":
+                    scheme.button_font = cd["color"]
+                # case "button_outline":
+                #     scheme.button_outline = cd["color"]
+
+                case _:
+                    to_return['message'] = 'Wrong object'
+                    return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
+
+            scheme.save()
+            to_return['message'] = 'Success!'
+            return HttpResponse(json.dumps(to_return), content_type="application/json")
+        else:
+            to_return['message'] = "invalid"
+    return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
 # яркость определяется по HSV(v)

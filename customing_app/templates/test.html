@@ -23,7 +23,7 @@
             }
             .card {
                 background-color: {{ scheme.card }};
-                padding: 1rem 2rem;
+                padding: 1rem;
                 max-width: 500px;
                 border-radius: 1rem;
                 position: relative;
@@ -46,18 +46,18 @@
                 background-color: {{ scheme.button_click }};;
             }
         </style>
-        
-        <div class="center-display">
-            <div class="card">
-                <center>
-                    <div style="border-radius: 100%; background-color: grey; width: 5rem; height: 5rem"></div>
-                </center>
-                <h3 class="center-display" style="margin-top: 0;">
-                    Hello friend
-                </h3>
-            </div>
-        </div>
         <center>
+            <p>
+                <div class="card">
+                    <div style="border-radius: 100%; background-color: grey; width: 5rem; height: 5rem"></div>
+                    <h3 class="center-display" style="margin: 0;padding-bottom: .2rem">
+                        {{profile.name}}
+                    </h3>
+                    <div style="font-size: 80%;">
+                        {{profile.about}}
+                    </div>
+                </div>
+            </p>
             <div style="max-width: 900px;">
                 {% for _ in urls %}
                 <a class="button" style="width:100%; display:block;max-width: -webkit-fill-available; margin-bottom: .3rem">My twitch</a>

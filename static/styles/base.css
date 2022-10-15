@@ -117,3 +117,10 @@ label {
 .edit-heading {
     font-size: 230%;
 }
+.color-preview {
+    border: 1px white solid; 
+    width: 20px; 
+    height: 20px; 
+    margin-left: .2rem;
+    border-radius: .25rem;
+}

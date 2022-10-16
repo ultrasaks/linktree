@@ -32,7 +32,6 @@ def colors(request):
 @login_required
 @scheme_required
 def colors_edit(request):
-    # !!!TODO: пофиксить color_name
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
     return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme})
@@ -104,6 +103,7 @@ def edit_scheme(request):
         to_return['message'] = "Your profile don't have a color scheme"
 
     else:
+        
         form = ColorForm(request.POST)
         if form.is_valid():
             scheme = profile.colors

@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('create/', views.create_profile),
     path('colors/create/', views.create_scheme),
+    path('colors/change/', views.edit_scheme),
 ]

@@ -1,28 +1,57 @@
 {% extends 'baza.html' %}
 
 {% block content %}
-    <input type="hidden" id="color_obj">
+    <input type="hidden" id="color_obj" value>
     {% for color_id, color in scheme.get_colors_plural.items %}
         <div style="display: flex; margin: 1rem 0px">
             <a id="{{color_id}}">{{color_id}}</a>
-            <div style="background-color: {{color}};" class="color-preview"></div>
+            <input type="hidden" value="{{color}}" id="{{color_id}}_hash">
+            <div style="background-color: {{color}};" id="{{color_id}}_preview" class="color-preview"></div>
         </div>
     {% endfor %}
+    <form>
+        {% csrf_token %}
+        <h2>Change color&nbsp;<input type="color" id="color_pick" value></h2>
+        <button type="button" class="button" id="change">Change</button>
+    </form>
+    
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function change_color(color_id) {
-        $("#color_obj").value = color_id;
-    }
-    // TODO: пофиксить color_name
-    const color_objects = ["background", "font", "card", "button", "button_hover", "button_click", "button_font"]
-    for (var color_obj in color_objects) {
-        var color_name = String(color_objects[color_obj])
-        $("#"+color_name).click(function() { 
-            console.log("#"+color_name)
-            change_color(color_name);
+    function send_change() {
+        var color_object = $('#color_obj').val();
+        var color = $('#color_pick').val();
+        $.ajax({
+          type:'POST',
+          url:'/profile/colors/change/',
+          data:{
+              to_change: color_object,
+              color: color,
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          error: function(data){
+            console.log(data)
+          },
+          success: function(data) {
+            $("#"+color_object+"_preview")[0].style.backgroundColor = color
+            $("#"+color_object+"_hash")[0].value = color
+          }
+          
         });
     }
+
+    function change_color(color_id) {
+        $("#color_obj")[0].value = color_id;
+        $("#color_pick")[0].value = $("#"+color_id+"_hash")[0].value
+    }
+
+    const color_objects = ["background", "font", "card", "button", "button_hover", "button_click", "button_font"]
+    for (color_obj in color_objects) {
+        color_name = color_objects[color_obj]
+        $("#"+color_name).click(function() {change_color(this.id)}); // костыль мечты
+    }
+
+    $("#change").click(send_change)
 </script>
 {% endblock  %}

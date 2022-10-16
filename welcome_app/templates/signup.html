@@ -14,24 +14,24 @@
             {% csrf_token %}
             <p>
                 <label for="id_username">Имя пользователя</label><br>
-                <input class="login-input" type="text" name="username" maxlength="50" required="" id="id_username"><br>
+                <input class="login-input lineedit" type="text" name="username" maxlength="50" required="" id="id_username"><br>
                 <span class="helptext">Не более 50 символов: буквы, цифры и @/./+/-/_ </span>
             </p>
 
             <p>
                 <label for="id_email">Email</label><br>
-                <input class="login-input" type="email" name="email" maxlength="254" required="" id="id_email">
+                <input class="login-input lineedit" type="email" name="email" maxlength="254" required="" id="id_email">
             </p>
 
             <p>
                 <label for="id_password">Пароль</label><br>
-                <input class="login-input" type="password" name="password" required="" id="id_password"><br>
+                <input class="login-input lineedit" type="password" name="password" required="" id="id_password"><br>
                 <span class="helptext">Пароль должен содержать минимум 6 символов: цифры и латинские буквы в мелкой и большой раскладке</span>
             </p>
 
             <p>
                 <label for="id_password2">Повторите пароль</label><br>
-                <input class="login-input" type="password" name="password2" required="" id="id_password2">  
+                <input class="login-input lineedit" type="password" name="password2" required="" id="id_password2">  
             </p>
             <div style="height: 70px; width: 100%; background-color: black; color: white; font-weight: 900; max-width: 270px;">
                 CAPTCHA

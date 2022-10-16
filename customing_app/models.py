@@ -56,7 +56,7 @@ class ColorScheme(models.Model):
     button = models.CharField(max_length=8, default='#172C38', verbose_name='button')
     button_font = models.CharField(max_length=8, default='#D0EEFF', verbose_name='button font')
     button_hover = models.CharField(max_length=8, default='#1C3746', verbose_name='button hover')
-    button_click = models.CharField(max_length=8, default='#1272a5;', verbose_name='button click')
+    button_click = models.CharField(max_length=8, default='#1272a5', verbose_name='button click')
     #TODO: продумать
 
     class Meta:

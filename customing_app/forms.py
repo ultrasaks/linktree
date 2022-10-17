@@ -9,3 +9,9 @@ class ProfileForm(forms.Form):
 class ColorForm(forms.Form):
     to_change = forms.CharField()
     color = forms.CharField()
+
+
+class LinkForm(forms.Form):
+    icon = forms.CharField()
+    url = forms.CharField()
+    title = forms.CharField()

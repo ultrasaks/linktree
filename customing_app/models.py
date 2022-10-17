@@ -31,18 +31,19 @@ class Profile(models.Model):
 
 
 class Link(models.Model):
-    icon = models.CharField(max_length=100, default='link')
-    url = models.CharField(max_length=400)
-    user_profile = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE,)
-    title = models.CharField(max_length=100)
-    solid = models.BooleanField(default=False) #! кнопка
+    icon = models.CharField(max_length=100, default='link', verbose_name='иконка')
+    url = models.CharField(max_length=400, verbose_name='ссылка')
+    user_profile = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE, verbose_name='профиль')
+    title = models.CharField(max_length=100, verbose_name='заголовок')
+    # solid = models.BooleanField(default=False) #! кнопка
 
     def __str__(self) -> str:
         return self.title
     
+
     class Meta:
         db_table = 'Links'
-        verbose_name = 'ссылка'
+        verbose_name = 'ссылку'
         verbose_name_plural = 'ссылки'
 
 
@@ -68,7 +69,6 @@ class ColorScheme(models.Model):
         return f'Схема {self.owner.name}'
 
     def get_colors(self) -> list:
-        # print(self._meta.get_field('background').verbose_name)
         return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
 
     def get_colors_plural (self) -> dict:
@@ -80,3 +80,11 @@ class ColorScheme(models.Model):
         if is_ok is None:
             return False
         return True
+
+
+def check_link_correct(link:str) -> bool:
+    link = link.replace('http://', '').replace('https://', '')
+    is_ok = re.search(r'^[A-Za-z0-9]+\.[a-zA-Z]', link)
+    if is_ok is None:
+        return False
+    return True

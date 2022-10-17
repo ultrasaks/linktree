@@ -1,0 +1,146 @@
+{% extends 'baza.html' %}
+
+{% block header %}
+<div class="center-popup" id="central">
+    <div class="popup-out" id="modal">
+        <div class="popup card" id="popup">
+            <form id="popup-form">
+            {% csrf_token %}
+            <p>
+                <label for="form_url">Ссылка</label><br>
+                <input class="lineedit login-input" type="text" id="form_url" name="form_url" required>
+            </p>
+            
+            <p>
+                <label for="form_title">Название</label><br>
+                <input class="lineedit login-input" type="text" id="form_title" name="form_title" required>
+            </p>
+            <p>
+                <label for="form_icon">Иконка</label><br>
+                <select id="form_icon">
+                    <option value="link">Empty</option>
+                    {% for icon in all_icons %}
+                        <option value="{{icon}}">{{icon}}</option>
+                    {% endfor %}
+                </select>
+                <!-- <input class="lineedit login-input" type="text" id="form_icon" name="form_icon"> -->
+            </p>
+            <button class="button">Создать</button>
+        </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+<style>
+    .center-popup {
+        position: fixed;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        z-index: -1000;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+    .popup-out {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-height: 100%;
+        max-width: 100%;
+        height: 100%;
+        width: 100%;
+        background: rgba(0,0,0,0.4);
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .show {
+        opacity: 1!important;
+        pointer-events: auto!important;
+    }
+
+    .show2{
+        transition: all 0.2s ease-in-out!important;
+        transform: scale(1)!important;
+    }
+    .show-central {
+        z-index: 1000!important;
+        opacity: 1!important;
+    }
+    .popup {
+        transform: scale(1.8);
+        max-width: 15rem;
+        max-height: 18rem;
+        height: 100%;
+        width: 100%;
+        transition: all 0.2s ease-in-out;
+        overflow: hidden;
+        position: relative;
+        padding-top: 0px;
+    }
+</style>
+
+<p style="margin-top: 4rem">
+    <a class="button" onclick="javascript: show_popup()">Добавить</a>
+</p>
+
+<h2>Существующие ссылки</h2>
+
+<div id="links">
+    {% for link in links %}
+    <p>
+        <i class="ti ti-{{link.icon}}"></i> {{link.title}} ({{link.url}})
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).on('submit','#popup-form',function(e){
+        e.preventDefault();
+    
+        $.ajax({
+          type:'POST',
+          url:'/profile/links/new/',
+          data:{
+              url: $('#form_url').val(),
+              title: $('#form_title').val(),
+              icon: $('#form_icon').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          success: function(data){
+            hide_popup()
+          },
+          error: function(data){
+            alert('AAA');
+            console.log(data);
+          }
+        });
+      });
+
+
+    function show_popup () {
+        $('#modal')[0].classList.add('show');
+        $('#popup')[0].classList.add('show2');
+        $('#central')[0].classList.add('show-central');
+    }
+    function hide_popup () {
+        $('#modal')[0].classList.remove('show');
+        $('#popup')[0].classList.remove('show2');
+        $('#central')[0].classList.remove('show-central');
+    }
+</script>
+{% endblock %}

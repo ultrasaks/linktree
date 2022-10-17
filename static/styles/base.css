@@ -60,7 +60,7 @@ nav .button {
     display: flex;
     justify-content: center;
 }
-.test2 {
+.card {
     background-color: #D0EEFF;
     color: #172C38;
     margin: 1rem 1.5rem;
@@ -123,4 +123,7 @@ label {
     height: 20px; 
     margin-left: .2rem;
     border-radius: .25rem;
+}
+.hidden {
+    display: none!important;
 }

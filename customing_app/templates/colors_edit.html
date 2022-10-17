@@ -3,13 +3,13 @@
 {% block content %}
     <input type="hidden" id="color_obj" value>
     {% for color_id, color in scheme.get_colors_plural.items %}
-        <div style="display: flex; margin: 1rem 0px">
-            <a id="{{color_id}}">{{color_id}}</a>
+        <div style="display: flex; margin: 1rem 0px" id="{{color_id}}" class="button">
+            <a>{{color_id}}</a>
             <input type="hidden" value="{{color}}" id="{{color_id}}_hash">
             <div style="background-color: {{color}};" id="{{color_id}}_preview" class="color-preview"></div>
         </div>
     {% endfor %}
-    <form>
+    <form class="hidden">
         {% csrf_token %}
         <h2>Change color&nbsp;<input type="color" id="color_pick" value></h2>
         <button type="button" class="button" id="change">Change</button>
@@ -19,31 +19,33 @@
 
 {% block scripts %}
 <script>
+    var color_object = $('#color_obj');
+    var color = $('#color_pick');
     function send_change() {
-        var color_object = $('#color_obj').val();
-        var color = $('#color_pick').val();
         $.ajax({
           type:'POST',
           url:'/profile/colors/change/',
           data:{
-              to_change: color_object,
-              color: color,
+              to_change: color_object.val(),
+              color: color.val(),
               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
           },
           error: function(data){
-            console.log(data)
+            console.log(data.responseJSON)
           },
           success: function(data) {
-            $("#"+color_object+"_preview")[0].style.backgroundColor = color
-            $("#"+color_object+"_hash")[0].value = color
+            $("#"+color_object.val()+"_preview")[0].style.backgroundColor = color.val()
+            $("#"+color_object.val()+"_hash")[0].value = color.val()
           }
           
         });
     }
 
     function change_color(color_id) {
-        $("#color_obj")[0].value = color_id;
-        $("#color_pick")[0].value = $("#"+color_id+"_hash")[0].value
+        $("form")[0].classList = []
+
+        color_object[0].value = color_id;
+        color[0].value = $("#"+color_id+"_hash")[0].value
     }
 
     const color_objects = ["background", "font", "card", "button", "button_hover", "button_click", "button_font"]

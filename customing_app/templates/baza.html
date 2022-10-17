@@ -7,8 +7,11 @@
         <title>{{ title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <link rel="stylesheet" href="https://unpkg.com/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     </head>
     <body>
+        {% block header %}
+        {% endblock %}
         <div style="margin: 0;width: 100%;background-color: white;height: 2rem;position: fixed;left: 0;top: 0;z-index: 555;">
             <a href="/profile/">P</a>
             <a href="/profile/colors/">C</a>
@@ -20,8 +23,7 @@
                 color: #D0EEFF;
             }
         </style>
-        {% block header %}
-        {% endblock %}
+        
         <div style="margin-top: 3rem">
             {% block content %}
             {% endblock %}

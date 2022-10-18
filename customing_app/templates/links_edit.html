@@ -17,6 +17,7 @@
             </p>
             <p>
                 <label for="form_icon">Иконка</label><br>
+                <i class="ti ti-link" id="icon_preview"></i><br>
                 <select id="form_icon">
                     <option value="link">Empty</option>
                     {% for icon in all_icons %}
@@ -131,7 +132,9 @@
         });
       });
 
-
+    $("#form_icon").change(function() {
+        $("#icon_preview")[0].classList = ['ti ti-'+$("#form_icon").val()]
+    });
     function show_popup () {
         $('#modal')[0].classList.add('show');
         $('#popup')[0].classList.add('show2');

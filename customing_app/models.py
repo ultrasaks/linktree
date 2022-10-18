@@ -83,6 +83,7 @@ class ColorScheme(models.Model):
 
 
 def check_link_correct(link:str) -> bool:
+    #TODO: перенести в более подходящее место
     link = link.replace('http://', '').replace('https://', '')
     is_ok = re.search(r'^[A-Za-z0-9]+\.[a-zA-Z]', link)
     if is_ok is None:

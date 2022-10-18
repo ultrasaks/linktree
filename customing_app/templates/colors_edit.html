@@ -11,10 +11,10 @@
     {% endfor %}
     <form class="hidden">
         {% csrf_token %}
-        <h2>Change color&nbsp;<input type="color" id="color_pick" value></h2>
+        <h2>Change color &nbsp; <input type="color" id="color_pick" value></h2>
         <button type="button" class="button" id="change">Change</button>
     </form>
-    
+    <a style="color: white" href="#">Создать рандомную</a>
 {% endblock %}
 
 {% block scripts %}

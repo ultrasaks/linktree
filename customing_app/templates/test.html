@@ -6,7 +6,6 @@
         <title>{{ profile.name }}</title>
         <meta name="description" content="{{ profile.about }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
     </head>
     <body>
         <style>
@@ -38,6 +37,10 @@
                 text-decoration: none;
                 transition-duration: .17s;
                 cursor: pointer;
+                width:100%;
+                display:block;
+                max-width: -webkit-fill-available;
+                margin-bottom: .3rem
             }
             .button:hover {
                 background-color: {{ scheme.button_hover }};
@@ -45,25 +48,45 @@
             .button:active {
                 background-color: {{ scheme.button_click }};;
             }
+            .name {
+                margin: 0;
+                padding-bottom: .2rem
+            }
+            .about {
+                font-size: 80%;
+            }
+
+            .button-list {
+                max-width: 900px;
+            }
+            .profile-image {
+                border-radius: 50%;
+                background-color: grey;
+                width: 5rem;height: 5rem;
+                overflow: hidden;
+            }
         </style>
         <center>
             <p>
                 <div class="card">
-                    <div style="border-radius: 100%; background-color: grey; width: 5rem; height: 5rem"></div>
-                    <h3 class="center-display" style="margin: 0;padding-bottom: .2rem">
+                    <img class="profile-image" src="/">
+                    <h3 class="center-display name">
                         {{profile.name}}
                     </h3>
-                    <div style="font-size: 80%;">
+                    <div class="about">
                         {{profile.about}}
                     </div>
                 </div>
             </p>
-            <div style="max-width: 900px;">
-                {% for _ in urls %}
-                <a class="button" style="width:100%; display:block;max-width: -webkit-fill-available; margin-bottom: .3rem">My twitch</a>
+            <div class="button-list">
+                {% for link in links %}
+                <a class="button" href="https://{{link.url}}">
+                    <i class="ti ti-{{link.icon}}"></i>
+                    {{link.title}}
+                </a>
                 {% endfor %}
             </div>
         </center>
-
+        <link rel="stylesheet" href="https://unpkg.com/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     </body>
 </html>

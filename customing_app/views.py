@@ -58,8 +58,9 @@ def link_test(request):
 
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
+    links = Link.objects.filter(user_profile=profile)
 
-    return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'urls': urls_test})
+    return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'links': links})
 
 
 
@@ -183,3 +184,4 @@ def create_link(request):
 #     BRAND_ICONS
 
 # яркость определяется по HSV(v)
+#TODO: перенести все style= <style> <script> в css и js файлы соответственно

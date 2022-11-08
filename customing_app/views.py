@@ -44,7 +44,8 @@ def colors_edit(request):
 @login_required
 @scheme_required
 def links_edit(request):
-    #TODO: Добавление ссылки сразу же после создания
+    #TODO: Кнопка изменения ссылок, добавление этой кнопки после создания ссылки
+    #TODO: Показывать название ссылки без brand-
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile)
     all_icons = settings.BRAND_ICONS
@@ -54,8 +55,6 @@ def links_edit(request):
 @login_required
 @scheme_required
 def link_test(request):
-    urls_test = ['' for _ in range(10)]
-
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
     links = Link.objects.filter(user_profile=profile)
@@ -167,7 +166,6 @@ def create_link(request):
         url = cd['url']
         title = cd['title']
         icon = cd['icon']
-
         if icon not in settings.BRAND_ICONS:
             icon = 'link'
         

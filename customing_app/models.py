@@ -8,7 +8,7 @@ class Profile(models.Model):
     owner = models.ForeignKey('welcome_app.User', on_delete=models.CASCADE,)
 
     # image = models.ImageField(default='default.jpg', upload_to='profile_pics') #TODO: загрузка изображения
-    
+    #? Изображение конвертируется в jpeg/webp
     colors = models.ForeignKey('customing_app.ColorScheme', on_delete=models.CASCADE, blank=True, null=True)
     #TODO: статистика
 

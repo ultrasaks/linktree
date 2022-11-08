@@ -1,27 +1,6 @@
 {% extends 'baza.html' %}
 {% block content %}
 
-<style>
-    .edit-link {
-        text-decoration: none;
-        color: #273d49;
-        text-align: center;
-        cursor: pointer;
-    }
-    .edit-p {
-        transition-duration: .17s;
-        padding: 1rem 0rem;
-        margin: 0;
-        border-radius: .5rem;
-    }
-    .edit-p:hover {
-        background-color: rgb(39, 39, 66, .07);
-    }
-    .edit-p:focus {
-        background-color: rgb(39, 39, 66, .11);
-    }
-</style>
-
 {% if scheme == None %}
 
 <h1 class="edit-heading">Ещё чуть-чуть</h1>
@@ -49,8 +28,8 @@
 </div>
 
 
-<a href="/profile/colors/edit" style="color: white">Изменить</a><p></p>
-<a href="/profile/colors/test" style="color: white">Протестировать схему</a>
+<p><a href="/profile/colors/edit" class="white-link">Изменить</a></p>
+<p><a href="/profile/colors/test" class="white-link">Протестировать схему</a></p>
 {% endif %}
 {% endblock %}
 

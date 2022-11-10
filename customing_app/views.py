@@ -6,7 +6,8 @@ from .models import Profile, ColorScheme, Link, check_link_correct
 from .forms import ProfileForm, ColorForm, LinkForm
 from .decorators import profile_required, scheme_required
 
-
+#TODO: перенести все <script> в js файлы
+#TODO: добавить мету в показ профиля чтобы верх страницы перекрашивался в фон
 import json
 
 
@@ -155,10 +156,11 @@ def edit_scheme(request):
         else:
             to_return['message'] = "invalid"
     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
-
+#? TODO: удаление ссылок
 @login_required
 @scheme_required
 def create_link(request):
+    #TODO: удаление ссылки
     profile = Profile.objects.filter(owner=request.user).first()
     form = LinkForm(request.POST)
     if form.is_valid():
@@ -166,15 +168,26 @@ def create_link(request):
         url = cd['url']
         title = cd['title']
         icon = cd['icon']
+        past_id = cd['edit_id']
         if icon not in settings.BRAND_ICONS:
             icon = 'link'
         
         if not check_link_correct(url):
             return HttpResponse('oksimiron', status=400)
-
-        new_link = Link(icon=icon, url=url, title=title, user_profile=profile)
-        new_link.save()
-        return HttpResponse('OK')
+        
+        if past_id is None:
+            link = Link(icon=icon, url=url, title=title, user_profile=profile)
+            link.save()
+        else:
+            link = Link.objects.filter(id=past_id).first()
+            if link is None:
+                return HttpResponse('oksimiron', status=400)
+            
+            link.url = url
+            link.title = title
+            link.icon = icon
+            link.save()
+        return HttpResponse(json.dumps({'status': 'OK', 'id': link.id}), content_type="application/json")
     return HttpResponse('oksimiron', status=400)
 
 

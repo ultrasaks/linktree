@@ -5,8 +5,11 @@
     <div class="popup-out" id="modal">
         <div class="popup card" id="popup">
             <form id="popup-form">
+                <input class="hidden" id="edit_id" value="">
             {% csrf_token %}
             <p>
+                <i class="ti ti-x" style="position: absolute; right: 1rem; font-size: 140%; cursor: pointer;" onclick="hide_popup()">
+                </i>
                 <label for="form_url">Ссылка</label><br>
                 <input class="lineedit login-input" type="text" id="form_url" name="form_url" required>
             </p>
@@ -24,9 +27,8 @@
                         <option value="{{icon}}">{{icon}}</option>
                     {% endfor %}
                 </select>
-                <!-- <input class="lineedit login-input" type="text" id="form_icon" name="form_icon"> -->
             </p>
-            <button class="button">Создать</button>
+            <button class="button" id="submit-button">Создать</button>
         </form>
         </div>
     </div>
@@ -37,15 +39,18 @@
 
 
 <p style="margin-top: 4rem">
-    <a class="button" onclick="javascript: show_popup()">Добавить</a>
+    <a class="button" onclick="javascript: toggle_popup()">Добавить</a>
 </p>
 
 <h2>Существующие ссылки</h2>
 
 <div id="links">
     {% for link in links %}
-    <p>
+    <p id="link_{{link.id}}" onclick="link_to_popup('{{link.id}}')">
         <i class="ti ti-{{link.icon}}"></i> {{link.title}} ({{link.url}})
+        <input type="hidden" id="{{link.id}}_url" value="{{link.url}}">
+        <input type="hidden" id="{{link.id}}_title" value="{{link.title}}">
+        <input type="hidden" id="{{link.id}}_icon" value="{{link.icon}}">
     </p>
     {% endfor %}
 </div>
@@ -54,11 +59,13 @@
 
 {% block scripts %}
 <script>
+
     $(document).on('submit','#popup-form',function(e){
         e.preventDefault();
         url = $('#form_url').val()
         title = $('#form_title').val()
-        icon = $('#form_icon').val(),
+        icon = $('#form_icon').val()
+        edit_id = $('#edit_id').val()
         $.ajax({
           type:'POST',
           url:'/profile/links/new/',
@@ -66,41 +73,94 @@
               url: url,
               title: title,
               icon: icon,
+              edit_id: edit_id,
               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
           },
           success: function(data){
             hide_popup();
-            add_link(icon, title, url);
+            if (edit_id == "") {
+                add_link(data.id, url, title, icon);
+            } else {
+                edit_link(edit_id, url, title, icon)
+            }
           },
           error: function(data){
-            alert('AAA');
+            alert('Unknown error');
             console.log(data);
           }
         });
       });
+    
+    function set_class(icon) {
+            $("#icon_preview")[0].classList = ['ti ti-'+icon]
+    }
 
     $("#form_icon").change(function() {
-        $("#icon_preview")[0].classList = ['ti ti-'+$("#form_icon").val()]
+        set_class($("#form_icon").val())
     });
-    function show_popup () {
-        $('#modal')[0].classList.add('show');
-        $('#popup')[0].classList.add('show2');
-        $('#central')[0].classList.add('show-central');
-    }
-    function hide_popup () {
-        $('#modal')[0].classList.remove('show');
-        $('#popup')[0].classList.remove('show2');
-        $('#central')[0].classList.remove('show-central');
+    
+    function make_empty_popup () {
+        $("#form_url").val("");
+        $("#form_title").val("");
+        $("#edit_id").val("");
+        $("#form_icon").val("link");
+        set_class('link');
+        $("#submit-button")[0].innerText = "Создать"
     }
     const htmlEntities={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"};
-    function add_link (icon, name, link) {
-        name = name.replace(/([&<>\"'])/g,match=>htmlEntities[match]);
+    function make_safe(str) {
+        return str.replace(/([&<>\"'])/g,match=>htmlEntities[match]);
+    }
+
+    function link_to_popup (id) {
+        name = $(`#${id}_title`).val()
+        icon = $(`#${id}_icon`).val()
+        url = $(`#${id}_url`).val()
+
+        $("#form_url").val(url);
+        $("#form_title").val(name);
+        $("#edit_id").val(id);
+        $("#form_icon").val(icon);
+        set_class(icon);
+        $("#submit-button")[0].innerText = "Сохранить"
+
+        toggle_popup()
+    }
+
+    function add_link (id, link, name, icon) {
+        name = make_safe(name)
+        link = make_safe(link)
         $('#links').append(`
-            <p>
+            <p id="link_${id}" onclick="link_to_popup('${id}')">
                 <i class="ti ti-${icon}"></i>
                 ${name} (${link})
+                <input type="hidden" id="${id}_url" value="${url}">
+                <input type="hidden" id="${id}_title" value="${name}">
+                <input type="hidden" id="${id}_icon" value="${icon}">
             </p>
         `)
+    }
+    function edit_link (id, link, name, icon) {
+        name = make_safe(name)
+        link = make_safe(link)
+
+        $("#link_"+id)[0].innerHTML = `
+        <i class="ti ti-${icon}"></i>
+        ${name} (${link})
+        <input type="hidden" id="${id}_url" value="${url}">
+        <input type="hidden" id="${id}_title" value="${name}">
+        <input type="hidden" id="${id}_icon" value="${icon}">
+        `
+    }
+
+    function toggle_popup () {
+        $('#modal')[0].classList.toggle('show');
+        $('#popup')[0].classList.toggle('show2');
+        $('#central')[0].classList.toggle('show-central');
+    }
+    function hide_popup () {
+        toggle_popup();
+        make_empty_popup();
     }
     
 </script>

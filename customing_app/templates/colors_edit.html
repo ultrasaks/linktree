@@ -31,7 +31,6 @@
               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
           },
           error: function(data){
-            console.log(data.responseJSON)
           },
           success: function(data) {
             $("#"+color_object.val()+"_preview")[0].style.backgroundColor = color.val()

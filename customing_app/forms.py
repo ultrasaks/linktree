@@ -15,3 +15,4 @@ class LinkForm(forms.Form):
     icon = forms.CharField()
     url = forms.CharField()
     title = forms.CharField()
+    edit_id = forms.IntegerField(required=False)

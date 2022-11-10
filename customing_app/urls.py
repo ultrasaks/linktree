@@ -1,5 +1,6 @@
 from django.urls import path
 import customing_app.views as views
+import customing_app.rest as rest
 
 urlpatterns = [
     path('', views.home),
@@ -10,9 +11,9 @@ urlpatterns = [
     path('colors/test/', views.link_test),
 
     path('links/edit/', views.links_edit),
-    path('links/new/', views.create_link),
+    path('links/new/', rest.create_link),
     
-    path('create/', views.create_profile),
-    path('colors/create/', views.create_scheme),
-    path('colors/change/', views.edit_scheme),
+    path('create/', rest.create_profile),
+    path('colors/create/', rest.create_scheme),
+    path('colors/change/', rest.edit_scheme),
 ]

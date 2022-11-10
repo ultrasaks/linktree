@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('links/edit/', views.links_edit),
     path('links/new/', rest.create_link),
+    path('links/delete/', rest.delete_link),
     
     path('create/', rest.create_profile),
     path('colors/create/', rest.create_scheme),

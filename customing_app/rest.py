@@ -4,7 +4,7 @@ from django.conf import settings
 
 from .decorators import profile_required, scheme_required
 from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, ColorForm, LinkForm
+from .forms import ProfileForm, ColorForm, LinkForm, DeleteLinkForm
 
 import json
 
@@ -95,7 +95,6 @@ def edit_scheme(request):
 @login_required
 @scheme_required
 def create_link(request):
-    #TODO: удаление ссылки
     profile = Profile.objects.filter(owner=request.user).first()
     form = LinkForm(request.POST)
     if form.is_valid():
@@ -125,6 +124,20 @@ def create_link(request):
         return HttpResponse(json.dumps({'status': 'OK', 'id': link.id}), content_type="application/json")
     return HttpResponse('oksimiron', status=400)
 
+
+@login_required
+@scheme_required
+def delete_link(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+    form = DeleteLinkForm(request.POST)
+    
+    if form.is_valid():
+        link_id = form.cleaned_data['id']
+        to_delete = Link.objects.filter(id=link_id, user_profile=profile).first()
+        if to_delete is not None:
+            to_delete.delete()
+            return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
 
 # def search_icon(request):
 #     settings.BRAND_ICONS

@@ -45,8 +45,9 @@ def colors_edit(request):
 @login_required
 @scheme_required
 def links_edit(request):
-    #TODO: Кнопка изменения ссылок, добавление этой кнопки после создания ссылки
+    #TODO: Фронт для мобилок - более большого размера каждый элемент (~ 3rem h)
     #TODO: Показывать название ссылки без brand-
+    #TODO: собственный dropdown
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile)
     all_icons = settings.BRAND_ICONS

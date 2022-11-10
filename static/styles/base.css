@@ -214,3 +214,31 @@ label {
     border-bottom-color: #B5CECE;
     border-radius: 4px;
 }
+
+.cross {
+    font-size: 140%; 
+    cursor: pointer;
+    transition-duration: .2s;
+}
+.cross-popup {
+    position: absolute; 
+    right: 1rem; 
+    color: #172C38;
+}
+.cross-popup:hover {
+    color: #005281;
+}
+.cross-red {
+    position: relative;
+    top: .25rem;
+    color: #eb3b3b;
+}
+.cross-red:hover {
+    color: #FF5E5E;
+}
+.edit-icon {
+    color: #c6c647;
+}
+.edit-icon:hover {
+    color: #ECEC54;
+}

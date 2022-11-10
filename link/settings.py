@@ -14,7 +14,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*'] #? 'mylink.pythonanywhere.com'
 # CSRF_TRUSTED_ORIGINS = ['https://dfkjsfdkdfjk.fdkjsd']
-CSRF_TRUSTED_ORIGINS = ['https://fa5a-128-71-211-21.eu.ngrok.io']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -8,8 +8,7 @@
                 <input class="hidden" id="edit_id" value="">
             {% csrf_token %}
             <p>
-                <i class="ti ti-x" style="position: absolute; right: 1rem; font-size: 140%; cursor: pointer;" onclick="hide_popup()">
-                </i>
+                <i class="ti ti-x cross cross-popup" onclick="hide_popup()"></i>
                 <label for="form_url">Ссылка</label><br>
                 <input class="lineedit login-input" type="text" id="form_url" name="form_url" required>
             </p>
@@ -46,11 +45,13 @@
 
 <div id="links">
     {% for link in links %}
-    <p id="link_{{link.id}}" onclick="link_to_popup('{{link.id}}')">
-        <i class="ti ti-{{link.icon}}"></i> {{link.title}} ({{link.url}})
+    <p id="link_{{link.id}}">
+        <i class="ti ti-{{link.icon}}"></i> {{link.title}} (<a class="white-link" href="{{link.url}}">{{link.url}}</a>)
         <input type="hidden" id="{{link.id}}_url" value="{{link.url}}">
         <input type="hidden" id="{{link.id}}_title" value="{{link.title}}">
         <input type="hidden" id="{{link.id}}_icon" value="{{link.icon}}">
+        <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('{{link.id}}')"></i>
+        <i class="ti ti-x cross cross-red" onclick="delete_link('{{link.id}}')"></i>
     </p>
     {% endfor %}
 </div>
@@ -131,12 +132,14 @@
         name = make_safe(name)
         link = make_safe(link)
         $('#links').append(`
-            <p id="link_${id}" onclick="link_to_popup('${id}')">
+            <p id="link_${id}">
                 <i class="ti ti-${icon}"></i>
-                ${name} (${link})
+                ${name} (<a class="white-link" href="${link}">${link}</a>)
                 <input type="hidden" id="${id}_url" value="${url}">
                 <input type="hidden" id="${id}_title" value="${name}">
                 <input type="hidden" id="${id}_icon" value="${icon}">
+                <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('${id}')"></i>
+                <i class="ti ti-x cross cross-red" onclick="delete_link('${id}')"></i>
             </p>
         `)
     }
@@ -146,11 +149,27 @@
 
         $("#link_"+id)[0].innerHTML = `
         <i class="ti ti-${icon}"></i>
-        ${name} (${link})
+        ${name} (<a class="white-link" href="${link}">${link}</a>)
         <input type="hidden" id="${id}_url" value="${url}">
         <input type="hidden" id="${id}_title" value="${name}">
         <input type="hidden" id="${id}_icon" value="${icon}">
+        <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('${id}')"></i>
+        <i class="ti ti-x cross cross-red" onclick="delete_link('${id}')"></i>
         `
+    }
+
+    function delete_link (id) {
+        $.ajax({
+          type:'POST',
+          url:'/profile/links/delete/',
+          data:{
+              id: id,
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          success: function(data){
+            $("#link_"+id).remove()
+          }
+        });
     }
 
     function toggle_popup () {

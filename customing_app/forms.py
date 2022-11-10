@@ -16,3 +16,7 @@ class LinkForm(forms.Form):
     url = forms.CharField()
     title = forms.CharField()
     edit_id = forms.IntegerField(required=False)
+
+
+class DeleteLinkForm(forms.Form):
+    id = forms.IntegerField()

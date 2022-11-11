@@ -3,9 +3,12 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name='language' content='RU'>
+        <meta name='og:site_name' content='MYLink'>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{ title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{ title }}</title>
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
         <link rel="stylesheet" href="https://unpkg.com/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     </head>
@@ -24,7 +27,7 @@
             }
         </style>
         
-        <div style="margin-top: 3rem">
+        <div class="page-content">
             {% block content %}
             {% endblock %}
         </div>

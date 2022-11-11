@@ -1,4 +1,6 @@
 {% extends 'baza.html' %}
+{% load static %}
+
 {% block content %}
 
 {% if scheme == None %}
@@ -21,7 +23,7 @@
 </div>
 {% else %}
 <h1>Дизайн</h1>
-<div style="display: flex;">
+<div class="display-flex">
     {% for color in scheme.get_colors %}
     <div style="background-color: {{color}};" class="color-preview"></div>
     {% endfor %}
@@ -35,22 +37,6 @@
 
 {% block scripts %}
 {% if scheme == None %}
-<script>
-    function create_empty() {
-        $.ajax({
-          type:'GET',
-          url:'/profile/colors/create/',
-        });
-    }
-
-    $("#emp").click(function() {
-        create_empty();
-        window.open('/profile/links', '_self');
-    })
-    $("#own").click(function() {
-        create_empty();
-        window.open('/profile/colors/edit', '_self');
-    })
-</script>
+<script src="{% static 'scripts/colors_welcome.js' %}"></script>
 {% endif %}
 {% endblock %}

@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=gettext_lazy('Обязательное поле. 50 символов и менее: буквы, цифры и @/./+/-/_ '),
         validators=[username_validator],
         error_messages={
-            'unique': gettext_lazy("Пользователь с таким именем уже существует."),
+            'unique': gettext_lazy("Пользователь с таким алиасом уже существует."),
         },
     )
     email = models.EmailField(

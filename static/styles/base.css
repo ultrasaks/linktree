@@ -26,6 +26,17 @@ nav .button {
     right: 1.5rem;
 }
 
+
+select {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: #ADC6D7;
+    border-color: #122937;
+    border-width: 0.2rem;
+    outline: none;
+}
+
+
 .button {
     border-radius: 2rem;
     background-color: #172C38;
@@ -186,7 +197,7 @@ label {
 .popup {
     transform: scale(1.8);
     max-width: 15rem;
-    max-height: 18rem;
+    max-height: 19.5rem;
     height: 100%;
     width: 100%;
     transition: all 0.2s ease-in-out;
@@ -241,4 +252,13 @@ label {
 }
 .edit-icon:hover {
     color: #ECEC54;
+}
+.page-content {
+    margin-top: 3rem
+}
+.display-flex {
+    display: flex;
+}
+.landing-nav {
+    position: fixed;width: 100%;height: auto;left:0;
 }

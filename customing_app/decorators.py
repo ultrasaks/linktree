@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-from .models import Profile, ColorScheme
+from .models import Profile
 
 
 def profile_required(view_func):

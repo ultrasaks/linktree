@@ -14,6 +14,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*'] #? 'mylink.pythonanywhere.com'
 # CSRF_TRUSTED_ORIGINS = ['https://dfkjsfdkdfjk.fdkjsd']
+CSRF_TRUSTED_ORIGINS = ['https://f3f2-128-71-211-21.eu.ngrok.io']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -105,7 +106,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-with open(f'{BASE_DIR}/link/icons.json', 'r') as icons:
+with open(f'{BASE_DIR}/link/icons.json', 'r') as icons, open(f'{BASE_DIR}/link/no_brand.json', 'r') as icons_n:
     #! copyright - github.com/tabler/tabler-icons
     BRAND_ICONS = json.loads(icons.read())
+    NO_BRAND = json.loads(icons_n.read())
 

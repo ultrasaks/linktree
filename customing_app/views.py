@@ -1,12 +1,10 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, ColorForm, LinkForm
+from .models import Profile, Link
 from .decorators import profile_required, scheme_required
 
-#TODO: перенести все <script> в js файлы
 #TODO: добавить <meta> в показ профиля чтобы верх страницы перекрашивался в фон
 
 
@@ -48,21 +46,17 @@ def links_edit(request):
     #TODO: Фронт для мобилок - более большого размера каждый элемент (~ 3rem h)
     #TODO: Показывать название ссылки без brand-
     #TODO: собственный dropdown
+    #? анимированное
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile)
-    all_icons = settings.BRAND_ICONS
+    all_icons = settings.NO_BRAND
     return render(request, 'links_edit.html', {'title': 'Изменение цвета', 'links': links, 'all_icons': all_icons})
-
 
 @login_required
 @scheme_required
 def link_test(request):
-    #TODO: перенести в show_app
-    profile = Profile.objects.filter(owner=request.user).first()
-    color_scheme = profile.colors
-    links = Link.objects.filter(user_profile=profile)
-
-    return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'links': links})
+    #TODO: то же самое но с верхней штукой
+    return redirect(f'/l/{request.user.username}')
 
 
 #TODO: перенести все style= <style> <script> в css и js файлы соответственно

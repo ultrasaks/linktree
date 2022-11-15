@@ -5,8 +5,6 @@ from django.conf import settings
 from .models import Profile, Link
 from .decorators import profile_required, scheme_required
 
-#TODO: добавить <meta> в показ профиля чтобы верх страницы перекрашивался в фон
-
 
 @login_required
 def home(request):
@@ -34,6 +32,7 @@ def colors(request):
 @login_required
 @scheme_required
 def colors_edit(request):
+    #TODO: сделать более похожим на links_edit
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
     return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme})
@@ -43,9 +42,7 @@ def colors_edit(request):
 @login_required
 @scheme_required
 def links_edit(request):
-    #TODO: Фронт для мобилок - более большого размера каждый элемент (~ 3rem h)
-    #TODO: Показывать название ссылки без brand-
-    #TODO: собственный dropdown
+    #TODO: Фронт для мобилок - более нормальное расположение кнопок
     #? анимированное
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile)

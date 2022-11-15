@@ -64,13 +64,17 @@ function link_to_popup(id) {
 
 function get_link_element(id, link, name, icon) {
     return `
-            <i class="ti ti-${icon}"></i>
-            ${name} (<a class="white-link" href="${link}">${link}</a>)
+            <span>
+                <i class="ti ti-${icon}"></i>
+                ${name} (<a class="white-link" href="${link}">${link}</a>)
+            </span>
             <input type="hidden" id="${id}_url" value="${url}">
             <input type="hidden" id="${id}_title" value="${name}">
             <input type="hidden" id="${id}_icon" value="${icon}">
-            <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('${id}')"></i>
-            <i class="ti ti-x cross cross-red" onclick="delete_link('${id}')"></i>
+            <span class="link-buttons">
+                <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('${id}')"></i>
+                <i class="ti ti-x cross cross-red" onclick="delete_link('${id}')"></i>
+            </span>
         `
 }
 
@@ -80,7 +84,7 @@ function add_link(id, link, name, icon) {
 
     var inside_link = get_link_element(id, link, name, icon);
     $('#links').append(`
-            <p id="link_${id}">
+            <p id="link_${id}" class="link-mobile">
                 ${inside_link}
             </p>
         `)

@@ -247,6 +247,30 @@ label {
 .cross-red:hover {
     color: #FF5E5E;
 }
+.link-buttons {
+    margin-left: 0.5rem;
+}
+@media (max-width: 700px){ 
+    .cross-red {
+        font-size: 200%;
+        position: inherit;
+    }
+    .link-mobile {
+        border-radius: 2rem;
+        background-color: #172C38;
+        color: #D0EEFF;
+        padding: .8rem 1.7rem;
+        display: flex;
+        align-items: center;
+    }
+    .links {
+        overflow-x: hidden;
+    }
+    .link-buttons {
+        position: sticky;
+        right: 1rem;
+    }
+}
 .edit-icon {
     color: #c6c647;
 }

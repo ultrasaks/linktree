@@ -44,15 +44,17 @@
 
 <h2>Существующие ссылки</h2>
 
-<div id="links">
+<div id="links" class="links">
     {% for link in links %}
-    <p id="link_{{link.id}}">
-        <i class="ti ti-{{link.icon}}"></i> {{link.title}} (<a class="white-link" href="{{link.url}}">{{link.url}}</a>)
+    <p id="link_{{link.id}}" class="link-mobile">
+        <span><i class="ti ti-{{link.icon}}"></i> {{link.title}} (<a class="white-link" href="{{link.url}}">{{link.url}}</a>)</span>
         <input type="hidden" id="{{link.id}}_url" value="{{link.url}}">
         <input type="hidden" id="{{link.id}}_title" value="{{link.title}}">
         <input type="hidden" id="{{link.id}}_icon" value="{{link.icon}}">
-        <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('{{link.id}}')"></i>
-        <i class="ti ti-x cross cross-red" onclick="delete_link('{{link.id}}')"></i>
+        <span class="link-buttons">
+            <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('{{link.id}}')"></i>
+            <i class="ti ti-x cross cross-red" onclick="delete_link('{{link.id}}')"></i>
+        </span>
     </p>
     {% endfor %}
 </div>

@@ -18,7 +18,7 @@ def link_show(request, alias:str=None):
     profile = Profile.objects.filter(owner=owner).first()
     if profile:
         color_scheme = profile.colors
-        links = Link.objects.filter(user_profile=profile)
+        links = Link.objects.filter(user_profile=profile).order_by('position')
         if color_scheme and links:
             return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'links': links})
     return render(request, 'base.html', {'title': 'Not found'}) #404

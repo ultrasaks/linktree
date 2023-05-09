@@ -80,6 +80,13 @@ nav a:hover{
 .button:hover{
     transform: scale(1.05);
 }
+.button-disabled {
+    background-color: #a6a493;
+    color: white;
+    cursor: not-allowed;
+    transform: scale(1);
+
+}
 main {
     margin-top: 6rem;
 }

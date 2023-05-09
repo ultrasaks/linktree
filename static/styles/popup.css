@@ -60,3 +60,8 @@ input:focus {
 .popup .button {
     margin-top: 1rem;
 }
+.popup .close-btn {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.3rem;
+}

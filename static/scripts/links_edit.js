@@ -1,121 +1,201 @@
+const popup = document.querySelector('#popup');
+const popupButton = document.querySelector('#btn_add');
+const popupOverlay = document.querySelector('.popup-overlay');
+const popupError = document.querySelector(".popup-error");
+const urlInput = document.querySelector("#new_site_url");
 
-$(document).on('submit', '#popup-form', function (e) {
-    e.preventDefault();
-    url = $('#form_url').val()
-    title = $('#form_title').val()
-    icon = $('#form_icon').val()
-    edit_id = $('#edit_id').val()
-    $.ajax({
-        type: 'POST',
-        url: '/profile/links/new/',
-        data: {
-            url: url,
-            title: title,
-            icon: icon,
-            edit_id: edit_id,
-            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (data) {
-            hide_popup();
-            if (edit_id == "") {
-                add_link(data.id, url, title, icon);
-            } else {
-                edit_link(edit_id, url, title, icon)
-            }
-        },
-        error: function (data) {
-            alert('Unknown error');
-            console.log(data);
-        }
+
+const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+var url = ""
+var they = document.querySelectorAll('.card-edit')
+
+const regex = /^([a-z]+:\/\/)?([a-z0-9-]+\.)?[a-z0-9-]+\.[a-z]+(\/.*)?$/i;
+
+they.forEach(inputElement => {
+  inputElement.addEventListener('blur', () => {
+    change_name(inputElement.id);
+  });
+});
+
+
+function change_name(id){
+    id = id.split('_')[0]
+
+    var name = make_safe(document.getElementById(`${id}_name_inp`).value);
+    var url = make_safe(document.getElementById(`${id}_url_inp`).value);
+
+    url_elem = document.getElementById(`${id}_url`);
+    name_elem = document.getElementById(`${id}_name`);
+
+    url_elem.classList.remove('hid');
+    name_elem.classList.remove('hid');
+
+    url_elem.innerHTML = url + document.getElementById(`${id}_url_btn`).outerHTML;
+    name_elem.innerHTML = name + document.getElementById(`${id}_name_btn`).outerHTML;
+
+    document.querySelectorAll('.card-edit').forEach(element => {
+        element.classList.add('hid');
     });
+    request_name_change(id, name, url)
+}
+
+
+function request_name_change(id, name, url) {
+  fetch("/profile/links/edit/", {
+      method: "POST",
+      body: JSON.stringify({
+        id:id,
+        title:make_safe(name),
+        url:make_safe(url)
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        'X-CSRFToken': csrf
+      },
+    })
+}
+
+
+function del_link(id) {
+  fetch("/profile/links/delete/", {
+      method: "POST",
+      body: JSON.stringify({
+        id:id
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        'X-CSRFToken': csrf
+      },
+    })
+    document.getElementById(`${id}c`).remove()
+}
+
+
+function sh_name(id){
+  var inp = document.getElementById(`${id}_name_inp`);
+  inp.classList.remove('hid');
+  inp.focus();
+  document.getElementById(`${id}_name`).classList.add('hid')
+}
+
+function sh_url(id){
+  var inp = document.getElementById(`${id}_url_inp`);
+  inp.classList.remove('hid');
+  inp.focus();
+  document.getElementById(`${id}_url`).classList.add('hid')
+}
+
+
+popupButton.addEventListener('click', () => {
+    popup.classList.add('visible');
+    popupOverlay.classList.add('visible');
+    urlInput.focus();
 });
 
-function set_class(icon) {
-    $("#icon_preview")[0].classList = ['ti ti-' + icon]
+function close_popup(){
+  popup.classList.remove('visible');
+  popupOverlay.classList.remove('visible');
+  urlInput.value = '';
+  popupError.innerHTML = '';
+  document.querySelector('#popup_add').classList.remove('button-disabled');
 }
 
-$("#form_icon").change(function () {
-    set_class($("#form_icon").val())
-});
+function create_url() {
+  url = urlInput.value.trim();
 
-function make_empty_popup() {
-    $("#form_url").val("");
-    $("#form_title").val("");
-    $("#edit_id").val("");
-    $("#form_icon").val("link");
-    set_class('link');
-    $("#submit-button")[0].innerText = "Создать"
+  if (url !== "") {
+    if (regex.test(url)){
+    document.querySelector('#popup_add').classList.add('button-disabled');
+    fetch("/profile/links/new/", {
+      method: "POST",
+      body: JSON.stringify({
+        url:make_safe(url),
+        csrfmiddlewaretoken:csrf
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        'X-CSRFToken': csrf
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      add_card(data)
+      close_popup();
+  });}else{
+    popupError.innerHTML = 'Неправильный формат ссылки'
+  }
+  }
 }
 
-function link_to_popup(id) {
-    name = $(`#${id}_title`).val()
-    icon = $(`#${id}_icon`).val()
-    url = $(`#${id}_url`).val()
+const cardContainer = document.querySelector('.card-list');
 
-    $("#form_url").val(url);
-    $("#form_title").val(name);
-    $("#edit_id").val(id);
-    $("#form_icon").val(icon);
-    set_class(icon);
-    $("#submit-button")[0].innerText = "Сохранить"
 
-    toggle_popup()
+function switch_cards(id, where) {
+  var cards = cardContainer.querySelectorAll('.card');
+  need_card_pos = document.getElementById(`${id}_pos`);
+  pos = parseInt(need_card_pos.value)
+  if ((pos == 0 && where == 0) || (pos + 1 == cards.length && where == 1)){}
+  else{
+    const card1 = cards[pos];
+    if (where == 0){
+      var card2 = cards[pos - 1]
+      cardContainer.removeChild(card1);
+      cardContainer.insertBefore(card1, card2);
+    }else{
+      var card2 = cards[pos + 1]
+      console.log(cards, id, need_card_pos)
+      cardContainer.removeChild(card2);
+      cardContainer.insertBefore(card2, card1);
+    }
+    second_pos = card2.querySelector('.pos')
+    need_card_pos.value = second_pos.value;
+    second_pos.value = pos;
+    send_pos_change(id, where);
+  }
+  
 }
 
-function get_link_element(id, link, name, icon) {
-    return `
+function send_pos_change(id, where) {
+  fetch("/profile/links/edit/pos/", {
+      method: "POST",
+      body: JSON.stringify({
+        id:id,
+        where:where
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        'X-CSRFToken': csrf
+      },
+    })
+}
+
+function add_card(data) {
+  console.log(data);
+  link_id = data[0];link_url = data[1];link_title = data[2];link_position = data[3];
+  to_add = document.createElement("div");
+  to_add.classList.add('card')
+  to_add.id = `${link_id}c`
+  to_add.innerHTML = `
+      <input type="hidden" class="pos" id="${link_id}_pos" value="${link_position}">
+        <input id="${link_id}_name_inp" class="card-edit hid" value="${link_title}">
+        <b id="${link_id}_name">${link_title} <i class="ti ti-pencil card-icon intext" id="${link_id}_name_btn" onclick="javascript: sh_name('${link_id}')"></i></b>
+        <div>
+            <input id="${link_id}_url_inp" class="card-edit hid" value="${link_url}">
+            <div class="card-link" id="${link_id}_url">${link_url} <i class="ti ti-pencil card-icon intext" id="${link_id}_url_btn" onclick="javascript: sh_url('${link_id}')"></i></div></div>
+        <div class="card-icons">
             <span>
-                <i class="ti ti-${icon}"></i>
-                ${name} (<a class="white-link" href="${link}">${link}</a>)
+                <i class="ti ti-arrow-big-up card-icon" onclick="javascript: switch_cards('${link_id}', 0)"></i>
+                <i class="ti ti-arrow-big-down card-icon" onclick="javascript: switch_cards('${link_id}', 1)"></i>
             </span>
-            <input type="hidden" id="${id}_url" value="${url}">
-            <input type="hidden" id="${id}_title" value="${name}">
-            <input type="hidden" id="${id}_icon" value="${icon}">
-            <span class="link-buttons">
-                <i class="ti ti-pencil cross cross-red edit-icon" onclick="link_to_popup('${id}')"></i>
-                <i class="ti ti-x cross cross-red" onclick="delete_link('${id}')"></i>
-            </span>
-        `
-}
-
-function add_link(id, link, name, icon) {
-    name = make_safe(name)
-    link = make_safe(link)
-
-    var inside_link = get_link_element(id, link, name, icon);
-    $('#links').append(`
-            <p id="link_${id}" class="link-mobile">
-                ${inside_link}
-            </p>
-        `)
-}
-function edit_link(id, link, name, icon) {
-    name = make_safe(name)
-    link = make_safe(link)
-
-    $("#link_" + id)[0].innerHTML = get_link_element(id, link, name, icon)
-}
-
-function delete_link(id) {
-    $.ajax({
-        type: 'POST',
-        url: '/profile/links/delete/',
-        data: {
-            id: id,
-            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        success: function (data) {
-            $("#link_" + id).remove()
-        }
+            <i class="ti ti-trash card-icon" onclick="javascript: del_link('${link_id}')"></i>
+        </div>`;
+    cardContainer.appendChild(to_add);
+    
+    they = document.querySelectorAll('.card-edit')
+    they.forEach(inputElement => {
+        inputElement.addEventListener('blur', () => {
+          change_name(inputElement.id);
+      });
     });
-}
-
-function toggle_popup() {
-    $('#modal')[0].classList.toggle('show');
-    $('#popup')[0].classList.toggle('show2');
-    $('#central')[0].classList.toggle('show-central');
-}
-function hide_popup() {
-    toggle_popup();
-    make_empty_popup();
 }

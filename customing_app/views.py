@@ -17,8 +17,10 @@ def home(request):
 @scheme_required
 def links(request):
     profile = Profile.objects.filter(owner=request.user).first()
-    links = Link.objects.filter(user_profile=profile)
-    return render(request, 'links.html', {'title': 'Настройка ссылок', 'links': links})
+    links = Link.objects.filter(user_profile=profile).order_by('position')
+    all_icons = settings.NO_BRAND
+    return render(request, 'links_new.html', {'title': 'Изменение цвета', 'links': links, 'all_icons': all_icons, 'selected': 1})
+
 
 
 @login_required
@@ -26,34 +28,27 @@ def links(request):
 def colors(request):
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
-    return render(request, 'colors.html', {'title': 'Настройка дизайна', 'scheme': color_scheme})
+    return render(request, 'colors.html', {'title': 'Настройка дизайна', 'scheme': color_scheme, 'selected': 2})
 
 
 @login_required
 @scheme_required
 def colors_edit(request):
-    #TODO: сделать более похожим на links_edit
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
-    return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme})
+    return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme, 'selected': 2})
     
 
 
 @login_required
 @scheme_required
 def links_edit(request):
-    #TODO: Фронт для мобилок - более нормальное расположение кнопок
-    #? анимированное
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile)
     all_icons = settings.NO_BRAND
-    return render(request, 'links_edit.html', {'title': 'Изменение цвета', 'links': links, 'all_icons': all_icons})
+    return render(request, 'links_edit.html', {'title': 'Изменение цвета', 'links': links, 'all_icons': all_icons, 'selected': 2})
 
 @login_required
 @scheme_required
 def link_test(request):
-    #TODO: то же самое но с верхней штукой
     return redirect(f'/l/{request.user.username}')
-
-
-#TODO: перенести все style= <style> <script> в css и js файлы соответственно

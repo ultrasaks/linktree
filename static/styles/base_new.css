@@ -1,0 +1,122 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: #FDF7E3;
+}
+header {
+    padding: 0.5rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    max-width: calc(100% - 2rem);
+}
+nav {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 2rem;
+    background-color: #FFFDF8;
+}
+nav a, nav div {
+    color: #797976;
+    padding: .7rem 1rem;
+    font-weight: 600;
+    transition-duration: .21s;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+nav a:hover{
+    color: black;
+}
+.nav-chosen{
+    color: black;
+}
+.item{
+    font-size: 110%;
+}
+.item .ti {
+    margin-right: 0.5rem;
+}
+.card {
+    border-radius: 1.5rem;
+    background-color: #FFFDF8;
+    padding: 1.5rem;
+}
+.card h3, .card b {
+    margin-top: 0px;
+    align-items: center;
+    display: flex;
+}
+.card-list{
+    justify-content: center;
+    max-width: 1000px;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+}
+.card-list .card {
+    margin-top: 1rem;
+}
+@media (min-width: 800px) {
+    .card-list {
+        margin: 0 auto 0 50px;
+    }
+}
+.button{
+    background-color: #F4CA16;
+    color: black;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    transition: transform ease-out .15s;
+}
+.button:hover{
+    transform: scale(1.05);
+}
+main {
+    margin-top: 6rem;
+}
+.card-list .button{
+    max-width: 50%;
+    margin: 0 auto;
+}
+.card-icon{
+    font-size: 150%;
+    background-color: #FDF2CA;
+    border-radius: 25% / 30%;
+    padding: .15rem;
+    cursor: pointer;
+}
+.card-icons{
+    padding-top: .7rem;
+    justify-content: space-between;
+    display: flex;
+}
+.card-link {
+    align-items: center;
+    display: flex!important;
+}
+.card .intext {
+    margin-left: .5rem
+}
+
+.card-edit {
+    background: transparent;
+    position: absolute;
+    padding: 0;
+    border-radius: 0;
+    font-size: initial;
+    line-height: 2;
+    z-index: 999;
+}
+.hid {
+    display: none;
+    opacity: 0;
+}

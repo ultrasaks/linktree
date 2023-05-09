@@ -1,12 +1,19 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.db.models import F
 
 from .decorators import profile_required, scheme_required
 from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, ColorForm, LinkForm, DeleteLinkForm
+from .forms import ProfileForm, ColorForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm
+
+from bs4 import BeautifulSoup
+from requests import get
+from re import compile
 
 import json
+
+url_pattern = compile(r'/^([a-z]+:\/\/)?([a-z0-9-]+\.)?[a-z0-9-]+\.[a-z]+(\/.*)?$/i')
 
 
 @login_required
@@ -96,45 +103,100 @@ def edit_scheme(request):
 @scheme_required
 def create_link(request):
     profile = Profile.objects.filter(owner=request.user).first()
-    form = LinkForm(request.POST)
+    form = NewLinkForm(json.loads(request.body))
     if form.is_valid():
-        cd = form.cleaned_data
-        url = cd['url']
-        title = cd['title']
-        icon = cd['icon']
-        past_id = cd['edit_id']
-        if icon not in settings.BRAND_ICONS:
-            icon = 'link'
+        url = form.cleaned_data['url']
         
         if not check_link_correct(url):
             return HttpResponse('oksimiron', status=400)
         
-        if past_id is None:
-            link = Link(icon=icon, url=url, title=title, user_profile=profile)
-            link.save()
-        else:
-            link = Link.objects.filter(id=past_id).first()
-            if link is None:
-                return HttpResponse('oksimiron', status=400)
-            
-            link.url = url
-            link.title = title
-            link.icon = icon
-            link.save()
-        return HttpResponse(json.dumps({'status': 'OK', 'id': link.id}), content_type="application/json")
+        title, icon = get_title_icon(url)
+        
+        link = Link(icon=icon, url=url, title=title, user_profile=profile)
+        link.save()
+        return HttpResponse(json.dumps([link.id, link.url, link.title, link.position]), content_type="application/json")
+        
     return HttpResponse('oksimiron', status=400)
+
+
+@login_required
+@scheme_required
+def edit_link_name(request):
+    form = LinkEditForm(json.loads(request.body))
+    if form.is_valid():
+        cd = form.cleaned_data
+        link_id = cd['id']
+        url = cd['url']
+        title = cd['title']
+        
+        link = Link.objects.filter(id=link_id).first()
+        if link is None:
+            return HttpResponse('oksimiron', status=400)
+        
+        link.url = url
+        link.title = title
+        link.save()
+        
+        return HttpResponse('Success', status=200)
+    
+    
+@login_required
+@scheme_required
+def edit_pos(request):
+    form = LinkPosForm(json.loads(request.body))
+    if form.is_valid():
+        cd = form.cleaned_data
+        link_id = cd['id']
+        where = cd['where']
+        
+        link = Link.objects.filter(id=link_id).first()
+        if link is None:
+            return HttpResponse('oksimiron', status=400)
+        
+        if not where:
+            link2 = Link.objects.filter(position=link.position-1).first()
+        else:
+            link2 = Link.objects.filter(position=link.position+1).first()
+        
+        
+        link.position, link2.position = link2.position, link.position
+        link.save()
+        link2.save()
+        
+        return HttpResponse('Success', status=200)
+
+
+def get_title_icon(url:str) -> tuple:
+    try:
+        get_url = url if url[:4].lower() == 'http' else f'http://{url}'
+        response = get(get_url)
+    except:
+        return (url, 'link')
+    if response.status_code != 200:
+        return (url, 'link')
+    
+    soup = BeautifulSoup(response.content, 'html.parser')
+    title = soup.title.string
+    
+    # icon = 
+    return (title, 'link')
 
 
 @login_required
 @scheme_required
 def delete_link(request):
     profile = Profile.objects.filter(owner=request.user).first()
-    form = DeleteLinkForm(request.POST)
+    cd = json.loads(request.body)
+    form = DeleteLinkForm(cd)
     
     if form.is_valid():
         link_id = form.cleaned_data['id']
         to_delete = Link.objects.filter(id=link_id, user_profile=profile).first()
         if to_delete is not None:
+            for link in Link.objects.filter(position__gt=to_delete.position).all():
+                link.position = link.position - 1
+                link.save()
+
             to_delete.delete()
             return HttpResponse('OK')
     return HttpResponse('oksimiron', status=400)
@@ -143,3 +205,10 @@ def delete_link(request):
 #     settings.BRAND_ICONS
 
 # яркость определяется по HSV(v)
+
+
+# ENTITIES = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;"}
+# def make_safe(string) -> str:
+#     for key, value in ENTITIES.items():
+#         string = string.replace(key, value)
+#     return string

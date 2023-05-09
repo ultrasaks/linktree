@@ -11,12 +11,18 @@ class ColorForm(forms.Form):
     color = forms.CharField()
 
 
-class LinkForm(forms.Form):
-    icon = forms.CharField()
+class LinkEditForm(forms.Form):
+    id = forms.IntegerField()
     url = forms.CharField()
     title = forms.CharField()
-    edit_id = forms.IntegerField(required=False)
 
+class LinkPosForm(forms.Form):
+    id = forms.IntegerField()
+    where = forms.IntegerField()
+
+
+class NewLinkForm(forms.Form):
+    url = forms.CharField()
 
 class DeleteLinkForm(forms.Form):
     id = forms.IntegerField()

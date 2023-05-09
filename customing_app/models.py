@@ -35,12 +35,16 @@ class Link(models.Model):
     url = models.CharField(max_length=400, verbose_name='ссылка')
     user_profile = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE, verbose_name='профиль')
     title = models.CharField(max_length=100, verbose_name='заголовок')
-    # solid = models.BooleanField(default=False) #! кнопка
+    position = models.IntegerField(verbose_name='позиция', null=True)
 
     def __str__(self) -> str:
         return self.title
-    
 
+    def save(self, *args, **kwargs):
+        if not self.position:
+            self.position = Link.objects.filter(user_profile=self.user_profile).count()
+        super().save(*args, **kwargs)
+        
     class Meta:
         db_table = 'Links'
         verbose_name = 'ссылку'
@@ -85,7 +89,7 @@ class ColorScheme(models.Model):
 def check_link_correct(link:str) -> bool:
     #TODO: перенести в более подходящее место
     link = link.replace('http://', '').replace('https://', '')
-    is_ok = re.search(r'^[A-Za-z0-9]+\.[a-zA-Z]', link)
+    is_ok = re.search(r'^[A-Za-z0-9_-]+\.[a-zA-Z]', link)
     if is_ok is None:
         return False
     return True

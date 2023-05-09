@@ -41,7 +41,7 @@ class Link(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.position:
+        if self.position is None:
             self.position = Link.objects.filter(user_profile=self.user_profile).count()
         super().save(*args, **kwargs)
         

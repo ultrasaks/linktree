@@ -48,6 +48,7 @@ nav a:hover{
     margin-top: 0px;
     align-items: center;
     display: flex;
+    margin-bottom: 0.5rem;
 }
 .card-list{
     justify-content: center;

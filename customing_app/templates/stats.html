@@ -1,6 +1,7 @@
 {% extends 'base_new.html' %}
 {% load static %}
 
+
 {% block content %}
 
 {% if scheme == None %}
@@ -22,16 +23,24 @@
     </div>
 </div>
 {% else %}
-<h1>Дизайн</h1>
-<div class="display-flex">
-    {% for color in scheme.get_colors %}
-    <div style="background-color: {{color}};" class="color-preview"></div>
-    {% endfor %}
+
+
+<div class="card-list">
+    <h3>Profile</h3>
+    <div class="card">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tincidunt neque id sagittis euismod. Proin laoreet consectetur diam, eget bibendum metus rutrum in. Curabitur mi magna, suscipit et imperdiet hendrerit, semper nec nunc. Integer odio lacus, iaculis eget efficitur nec, hendrerit ac libero. 
+        <br>Quisque eget quam pellentesque, blandit velit quis, eleifend odio. Sed in condimentum neque, at mollis nibh. 
+    </div>
+
+
+    <h3>Background</h3>
+    <div class="card"></div>
+
+    <h3>Buttons</h3>
+    <div class="card"></div>
+
+    <h3>Fonts</h3>
+    <div class="card"></div>
 </div>
-
-
-<p><a href="/profile/colors/edit" class="white-link">Изменить</a></p>
-<p><a href="/profile/colors/test" class="white-link">Протестировать схему</a></p>
 {% endif %}
 {% endblock %}
 

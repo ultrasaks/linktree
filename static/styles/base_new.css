@@ -17,6 +17,28 @@ nav {
     border-radius: 2rem;
     background-color: #FFFDF8;
 }
+@media (max-width: 800px) {
+    /* .desktop-only{
+        display: none;
+    } */
+    .item {
+        display: flex;
+        flex-direction: column;
+        font-size: .8rem!important;
+    }
+    nav a, nav div {
+        padding: .5rem .5rem!important;
+    }
+    .item .ti {
+        margin: 0px!important;
+    } 
+}
+@media (min-width: 800px) {
+    /* .mobile-only{
+        display: none;
+    } */
+}
+
 nav a, nav div {
     color: #797976;
     padding: .7rem 1rem;

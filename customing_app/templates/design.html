@@ -1,0 +1,51 @@
+{% extends 'base_new.html' %}
+{% load static %}
+
+
+{% block content %}
+
+{% if scheme == None %}
+
+<h1 class="edit-heading">Ещё чуть-чуть</h1>
+<div class="center-div">
+    <div class="card">
+        <h3>Выберите цветовую схему</h3>
+        <a class="edit-link login-input" id="emp">
+            <p class="edit-p">
+                Стандартная
+            </p>
+        </a>
+        <a class="edit-link login-input" id="own">
+            <p class="edit-p">
+                Моя собственная
+            </p>
+        </a>
+    </div>
+</div>
+{% else %}
+
+
+<div class="card-list">
+    <h3>Профиль</h3>
+    <div class="card">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tincidunt neque id sagittis euismod. Proin laoreet consectetur diam, eget bibendum metus rutrum in. Curabitur mi magna, suscipit et imperdiet hendrerit, semper nec nunc. Integer odio lacus, iaculis eget efficitur nec, hendrerit ac libero. 
+        <br>Quisque eget quam pellentesque, blandit velit quis, eleifend odio. Sed in condimentum neque, at mollis nibh. 
+    </div>
+
+
+    <h3>Фон</h3>
+    <div class="card"></div>
+
+    <h3>Кнопки</h3>
+    <div class="card"></div>
+
+    <h3>Шрифты</h3>
+    <div class="card"></div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if scheme == None %}
+<script src="{% static 'scripts/colors_welcome.js' %}"></script>
+{% endif %}
+{% endblock %}

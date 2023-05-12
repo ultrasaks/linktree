@@ -1,13 +1,13 @@
 <header>
     <nav>
-        <div>
+        <div class="desktop-only">
             <a class="item {% if selected == 1 %}nav-chosen{% endif %}" href="/profile/links/"><i class="ti ti-id"></i> Ссылки</a>
             <a class="item {% if selected == 2 %}nav-chosen{% endif %}" href="/profile/colors/"><i class="ti ti-circle-square"></i> Дизайн</a>
-            <a class="item {% if selected == 3 %}nav-chosen{% endif %}"><i class="ti ti-chart-bar"></i> Статистика</a>
+            <a class="item {% if selected == 3 %}nav-chosen{% endif %}" href="/profile/stats/"><i class="ti ti-chart-bar"></i> Статистика</a>
         </div>
-        <!-- {{selected}} -->
-        <div>
-            <a class="item" href="/logout"><i class="ti ti-exit"></i> пайти</a>
+        <div class="desktop-only">
+            <a class="item" href="/logout"><i class="ti ti-exit"></i><i class="ti ti-logout"></i> Выйти</a>
         </div>
+        
     </nav>
 </header>

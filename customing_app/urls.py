@@ -17,6 +17,8 @@ urlpatterns = [
     path('links/delete/', rest.delete_link),
     path('links/edit/pos/', rest.edit_pos),
     
+    path('stats/', views.statistics),
+    
     path('create/', rest.create_profile),
     path('colors/create/', rest.create_scheme),
     path('colors/change/', rest.edit_scheme),

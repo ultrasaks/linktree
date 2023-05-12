@@ -13,7 +13,7 @@ with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] #? 'mylink.pythonanywhere.com'
-CSRF_TRUSTED_ORIGINS = ['https://mylink.pythonanywhere.com']
+CSRF_TRUSTED_ORIGINS = ['https://mylink.pythonanywhere.com', 'https://7baf-37-146-233-217.ngrok-free.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

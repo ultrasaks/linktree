@@ -19,7 +19,7 @@ url_pattern = compile(r'/^([a-z]+:\/\/)?([a-z0-9-]+\.)?[a-z0-9-]+\.[a-z]+(\/.*)?
 @login_required
 def create_profile(request):
     to_return = {}
-    form = ProfileForm(request.POST)
+    form = ProfileForm(json.loads(request.body))
     if form.is_valid():
         if Profile.objects.filter(owner=request.user):
             to_return['message'] = 'Your account already has a profile'

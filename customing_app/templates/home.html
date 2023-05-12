@@ -32,25 +32,28 @@
 {% block scripts %}
 {% if profile == None %}
 <script>
-    $(document).on('submit','#create-profile',function(e){
+    document.getElementById('create-profile').addEventListener('submit', function(e) {
         e.preventDefault();
-    
-        $.ajax({
-          type:'POST',
-          url:'/profile/create/',
-          data:{
-              username: $('#id_username').val(),
-              about: $('#id_about').val(),
-              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-          },
-          success: function(data){
+        username = document.getElementById('id_username').value;
+        about = document.getElementById('id_about').value;
+
+        if (username.replace(/\s/g, "") != "" ){
+        fetch("/profile/create/", {
+            method: "POST",
+            body: JSON.stringify({
+                    username: username,
+                    about: about
+                }),
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+            },
+            })
+        .then(data => {
             window.open('/profile/colors', '_self');
-          },
-          error: function(data){
-            alert('куда прёшь');
-          }
-        });
-      });
+        });}
+});
+
 </script>
 {% endif %}
 {% endblock %}

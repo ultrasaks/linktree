@@ -1,15 +1,15 @@
 function create_empty() {
-    $.ajax({
-        type: 'GET',
-        url: '/profile/colors/create/',
+    fetch('/profile/colors/create/', {
+        method: 'GET'
     });
 }
 
-$("#emp").click(function () {
+document.getElementById('emp').addEventListener('click', function () {
     create_empty();
     window.open('/profile/links', '_self');
-})
-$("#own").click(function () {
+});
+
+document.getElementById('own').addEventListener('click', function () {
     create_empty();
     window.open('/profile/colors/edit', '_self');
-})
+});

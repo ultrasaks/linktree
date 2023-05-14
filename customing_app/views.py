@@ -28,7 +28,7 @@ def links(request):
 def colors(request):
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
-    return render(request, 'design.html', {'title': 'Настройка дизайна', 'scheme': color_scheme, 'selected': 2})
+    return render(request, 'design.html', {'title': 'Настройка дизайна', 'scheme': color_scheme, 'selected': 2, 'profile': profile})
 
 
 @login_required

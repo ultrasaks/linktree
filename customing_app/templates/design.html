@@ -1,6 +1,126 @@
 {% extends 'base_new.html' %}
 {% load static %}
 
+{% block header %}
+
+<style>
+    .ava-circle {
+        padding: 2rem;
+        background: #e4dfdf;
+        border-radius: 2rem;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    .profile-top {
+        display: flex;
+        box-sizing: border-box;
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+    .profile-top .buttons {
+        display: flex;
+        flex-direction: column;
+        min-width: 50%;
+        box-sizing: border-box;
+    }
+    .profile-top .buttons .button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .profile-middle {
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-middle input {
+        margin-bottom: .5rem;
+    }
+    .btn-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+    .btn-sample {
+        color: white;
+        background: black;
+    }
+    .btn-row .button {
+        flex-grow: 1;
+        margin: 0.5rem 1rem;
+    }
+    .btn-sq {
+        border-radius: 0rem;
+    }
+    .btn-semi {
+        border-radius: 0.5rem;
+    }
+    .btn-outline {
+        background: white;
+        outline: black 2px solid;
+    }
+    .btn-soft-shadow {
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+        background: white;
+        color: black;
+    }
+    .btn-hard-shadow {
+        box-shadow: 5px 5px 0px #000;
+    }
+    @media (max-width: 800px) {
+        .btn-row {
+            flex-direction: column;
+            align-items: center;
+            justify-content: initial;
+        }
+        .btn-row .button {
+            width: 100%;
+        }
+    }
+    .color-square {
+        width: 4rem;
+        height: 4rem;
+        background: red;
+        border-radius: .5rem;
+        margin-right: 1rem;
+    }
+    .color-description {
+        display: flex;
+        flex-direction: column;
+        background: #efebde;
+        border-radius: .5rem;
+        padding: .7rem 10rem 1rem 1rem;
+    }
+    .color-description h6 {
+        margin: 0;
+        position: absolute;
+    }
+    .color-description .color {
+        margin-top: 1rem
+    }
+    .color-wrapper {
+        display: flex;
+    }
+</style>
+
+<div class="popup hid" id="font-popup">
+    <div class="card">
+        <i class="ti ti-x card-icon close-btn" onclick="javascript:close_popups()"></i>
+        <div class="card">Аа СПИСОК ШРИФТОВ</div>
+    </div>
+</div>
+
+<div class="popup hid" id="color-popup">
+    <div class="card">
+        <i class="ti ti-x card-icon close-btn" onclick="javascript:close_popups()"></i>
+        
+    </div>
+</div>
+
+
+{% endblock %}
 
 {% block content %}
 
@@ -27,19 +147,106 @@
 
 <div class="card-list">
     <h3>Профиль</h3>
-    <div class="card">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tincidunt neque id sagittis euismod. Proin laoreet consectetur diam, eget bibendum metus rutrum in. Curabitur mi magna, suscipit et imperdiet hendrerit, semper nec nunc. Integer odio lacus, iaculis eget efficitur nec, hendrerit ac libero. 
-        <br>Quisque eget quam pellentesque, blandit velit quis, eleifend odio. Sed in condimentum neque, at mollis nibh. 
+    <div class="card">
+        <div class="profile-top">
+            <div class="ava-circle">
+                <img class="hid">
+                {{profile.name.0.upper}}
+            </div>
+            <div class="buttons">
+                <div class="button">Выбрать изображение</div>
+                <div class="button">Удалить</div>
+            </div>
+        </div>
+        <div class="profile-middle">
+            <input placeholder="Имя" value="{{profile.name}}">
+            <input placeholder="Описание" value="{{profile.description}}">
+        </div>
+        <div class="profile-bottom"></div>
     </div>
 
 
     <h3>Фон</h3>
-    <div class="card"></div>
+    <div class="card">
+        <div class="background-row">
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+        </div>
+        <div class="background-row">
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+            <div class="background-chose"></div>
+        </div>
+    </div>
 
     <h3>Кнопки</h3>
-    <div class="card"></div>
+    <div class="card">
+        <h4>Заливка</h4>
+        <div class="btn-row">
+            <div class="button btn-sample btn-sq">&nbsp;</div> <div class="button btn-sample btn-semi">&nbsp;</div> <div class="button btn-sample">&nbsp;</div>
+        </div>
+        <h4>Обводка</h4>
+        <div class="btn-row">
+            <div class="button btn-sq btn-outline">&nbsp;</div> <div class="button btn-semi btn-outline">&nbsp;</div> <div class="button btn-outline">&nbsp;</div>
+        </div>
+        <h4>Мягкая тень</h4>
+        <div class="btn-row">
+            <div class="button btn-sample btn-soft-shadow btn-sq">&nbsp;</div> <div class="button btn-sample btn-soft-shadow btn-semi">&nbsp;</div> <div class="button btn-sample btn-soft-shadow">&nbsp;</div>
+        </div>
+        <h4>Жёсткая тень</h4>
+        <div class="btn-row">
+            <div class="button btn-sample btn-outline btn-hard-shadow btn-sq">&nbsp;</div> <div class="button btn-sample btn-outline btn-hard-shadow btn-semi">&nbsp;</div> <div class="button btn-sample btn-outline btn-hard-shadow">&nbsp;</div>
+        </div>
+
+        <h4>Цвет тени</h4>
+        <div class="color-wrapper">
+            <div class="color-square"></div>
+            <div class="color-description">
+                <h6>Color</h6>
+                <div class="color">#FFFFFF</div>
+            </div>
+        </div>
+
+        <h4>Цвет кнопки</h4>
+        <div class="color-wrapper">
+            <div class="color-square"></div>
+            <div class="color-description">
+                <h6>Color</h6>
+                <div class="color">#FFFFFF</div>
+            </div>
+        </div>
+        
+        <h4>Цвет текста</h4>
+        <div class="color-wrapper">
+            <div class="color-square"></div>
+            <div class="color-description">
+                <h6>Color</h6>
+                <div class="color">#FFFFFF</div>
+            </div>
+        </div>
+    </div>
 
     <h3>Шрифты</h3>
-    <div class="card"></div>
+    <div class="card">
+        Шрифт
+        <div class="color-wrapper">
+            <div class="font-square"></div>
+            <div class="font-name"></div>
+        </div>
+
+
+        Цвет
+        <div class="color-wrapper">
+            <div class="color-square"></div>
+            <div class="color-description">
+                <h6>Color</h6>
+                <div class="color">#FFFFFF</div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endif %}
 {% endblock %}
@@ -47,5 +254,11 @@
 {% block scripts %}
 {% if scheme == None %}
 <script src="{% static 'scripts/colors_welcome.js' %}"></script>
+{% else %}
+
+<script>
+    document.querySelector(".ava-circle").setAttribute('style', `width:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem);height:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem)`)
+</script>
+
 {% endif %}
 {% endblock %}

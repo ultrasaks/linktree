@@ -59,9 +59,11 @@ class ColorScheme(models.Model):
     card = models.CharField(max_length=8, default='#15151E', verbose_name='card')
     
     button = models.CharField(max_length=8, default='#172C38', verbose_name='button')
+    button_shape = models.IntegerField(default=0) #0-2
+    button_type = models.IntegerField(default=0) # 0-3
     button_font = models.CharField(max_length=8, default='#D0EEFF', verbose_name='button font')
-    button_hover = models.CharField(max_length=8, default='#1C3746', verbose_name='button hover')
-    button_click = models.CharField(max_length=8, default='#1272a5', verbose_name='button click')
+    # button_hover = models.CharField(max_length=8, default='#1C3746', verbose_name='button hover')
+    # button_click = models.CharField(max_length=8, default='#1272a5', verbose_name='button click')
     #TODO: продумать
 
     class Meta:
@@ -72,12 +74,12 @@ class ColorScheme(models.Model):
     def __str__(self) -> str:
         return f'Схема {self.owner.name}'
 
-    def get_colors(self) -> list:
-        return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
+    # def get_colors(self) -> list:
+    #     return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
 
-    def get_colors_plural (self) -> dict:
-        return {'background': self.background, 'font': self.font, 'card': self.card, 'button': self.button, 
-        'button_hover': self.button_hover, 'button_click': self.button_click, 'button_font': self.button_font}
+    # def get_colors_plural (self) -> dict:
+    #     return {'background': self.background, 'font': self.font, 'card': self.card, 'button': self.button, 
+    #     'button_hover': self.button_hover, 'button_click': self.button_click, 'button_font': self.button_font}
 
     def check_color(self, color: str) -> bool:
         is_ok = re.search(r'^#[A-Fa-f0-9]{6}$', color)

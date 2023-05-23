@@ -29,27 +29,7 @@
                 border-radius: 1rem;
                 position: relative;
             }
-            .button {
-                border-radius: 2rem;
-                background-color: {{ scheme.button }};
-                color: {{scheme.button_font}};
-                padding: .8rem 1.7rem;
-                font-weight: 700;
-                border: .2rem solid transparent;
-                text-decoration: none;
-                transition-duration: .17s;
-                cursor: pointer;
-                width:100%;
-                display:block;
-                max-width: -webkit-fill-available;
-                margin-bottom: .3rem
-            }
-            .button:hover {
-                background-color: {{ scheme.button_hover }};
-            }
-            .button:active {
-                background-color: {{ scheme.button_click }};;
-            }
+            {{scheme.get_button_css}}
             .name {
                 margin: 0;
                 padding-bottom: .2rem

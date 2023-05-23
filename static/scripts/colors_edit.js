@@ -1,35 +1,65 @@
-var color_object = $('#color_obj');
-var color = $('#color_pick');
-function send_change() {
-    $.ajax({
-        type: 'POST',
-        url: '/profile/design/change/',
-        data: {
-            to_change: color_object.val(),
-            color: color.val(),
-            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-        },
-        error: function (data) {
-        },
-        success: function (data) {
-            $("#" + color_object.val() + "_preview")[0].style.backgroundColor = color.val()
-            $("#" + color_object.val() + "_hash")[0].value = color.val()
-        }
 
+document.querySelector(".ava-circle").setAttribute('style', `width:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem);height:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem)`)
+const HEADERS = {"Content-Type": "application/json",'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value}
+
+const username = document.getElementById('username')
+const description = document.getElementById('about')
+
+const outlinedSelector = document.querySelector(".outlined-selector");
+
+function changeColor(elemId, value) {
+    console.log(elemId, `${elemId}-text`);
+    document.querySelector(`#${elemId}-text`).innerHTML = value;
+    fetch("/profile/design/change/color/", {
+        method: "POST",
+        body: JSON.stringify({
+            color_id: elemId,
+            color_hash: value
+        }),
+        headers: HEADERS,
     });
 }
 
-function change_color(color_id) {
-    $("form")[0].classList = []
-
-    color_object[0].value = color_id;
-    color[0].value = $("#" + color_id + "_hash")[0].value
+function changeName() {
+    document.querySelector('avaname').innerHTML = username.value[0].toUpperCase()
+    fetch("/profile/change/", {
+        method: "POST",
+        body: JSON.stringify({
+            name: username.value,
+            about: description.value
+        }),
+        headers: HEADERS,
+    });
 }
 
-const color_objects = ["background", "font", "card", "button", "button_hover", "button_click", "button_font"]
-for (color_obj in color_objects) {
-    color_name = color_objects[color_obj]
-    $("#" + color_name).click(function () { change_color(this.id) }); // костыль мечты
+function changeButton(element, send) {
+    outlinedSelector.style.top = element.offsetTop - 7 + "px";
+    outlinedSelector.style.left = element.offsetLeft - 7 + "px";
+    outlinedSelector.style.width = element.clientWidth + 10 + "px";
+    outlinedSelector.style.height = element.clientHeight + 10 + "px";
+    if (!send) { return }
+    fetch("/profile/design/change/button/", {
+        method: "POST",
+        body: JSON.stringify({
+            button_id: element.id,
+        }),
+        headers: HEADERS,
+    });
 }
 
-$("#change").click(send_change)
+document.querySelectorAll('.color-description').forEach(inputElement => {
+    inputElement.setAttribute('style', `width:${inputElement.clientHeight}px`)
+})
+colors = document.querySelectorAll('input[type=color]')
+colors.forEach(inputElement => {
+    inputElement.addEventListener('blur', () => {
+        changeColor(inputElement.id, inputElement.value)
+    });
+});
+
+username.addEventListener('blur', () => { changeName() })
+description.addEventListener('blur', () => { changeName() })
+
+document.querySelectorAll('.s').forEach(inputElement => {
+    inputElement.addEventListener('click', () => { changeButton(inputElement, true) })
+})

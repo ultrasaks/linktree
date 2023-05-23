@@ -2,8 +2,14 @@ from django.db import models
 import re
 
 AVAILABLE_FONTS = ('raleway', '')
-
-
+RADIUSES = ('0', '.5', '1.5',)
+ADDITIONAL_CSS_BTNS = (
+    '',
+    r'background:transparent;outline:{OUTLINE} 2px solid;',
+    r'box-shadow: 0px 3px 6px rgba({SHADOW_RGB}, 0.15);',
+    r'box-shadow: 5px 5px 0px {SHADOW};transition-duration: 0s;}.button:hover {transform: translate(2px, 2px);box-shadow: 3px 3px 0px {SHADOW}'
+)
+BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.5rem 1rem;border-radius:{RADIUS};cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;{ADDITIONAL}}'
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     about = models.CharField(max_length=400)
@@ -101,17 +107,34 @@ class ColorScheme(models.Model):
             return True
         return False
             
-                
     def set_font(self, font:str):
         if font in AVAILABLE_FONTS:
             self.font_name = font
             self.save()
+
+    def get_button_css(self) -> str:
+        baza = BTN_BASE.replace(r'{ADDITIONAL}', ADDITIONAL_CSS_BTNS[self.button_type-1])
+        baza = baza.replace(r'{BTN}', self.button)
+        baza = baza.replace(r'{BTN_FONT}', self.button_font)
+        baza = baza.replace(r'{SHADOW}', self.shadow)
+        baza = baza.replace(r'{OUTLINE}', self.outline)
+        baza = baza.replace(r'{RADIUS}', RADIUSES[self.button_shape-1])
+        if self.button_type == 3:
+            baza = baza.replace(r'{SHADOW_RGB}', hex_to_rgb(self.shadow))
+        return baza
+
+
 
     def check_color(self, color: str) -> bool:
         is_ok = re.search(r'^#[A-Fa-f0-9]{6}$', color)
         if is_ok is None:
             return False
         return True
+
+
+def hex_to_rgb(hex_code:str):
+    hex_code = hex_code.lstrip('#')
+    return str(tuple(int(hex_code[i:i+2], 16) for i in (0, 2, 4)))[1:-1]
 
 
 def check_link_correct(link:str) -> bool:

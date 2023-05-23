@@ -9,6 +9,7 @@ header {
     left: 0;
     width: 100vw;
     max-width: calc(100% - 2rem);
+    z-index: 1;
 }
 nav {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
@@ -99,6 +100,7 @@ nav a:hover{
     align-items: center;
     box-sizing: border-box;
     transition: transform ease-out .15s;
+    border-color: transparent;
 }
 .button:hover{
     transform: scale(1.05);
@@ -149,4 +151,26 @@ main {
 .hid {
     display: none;
     opacity: 0;
+}
+input[type=text] {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    background-color: #f5efe4;
+    font-size: 110%;
+    font-weight: 500;
+    color: #0c0c0b;
+    transition-duration: .21s;
+    outline: 1px transparent solid;
+}
+
+input[type=text]:focus {
+    outline: 1px #F4CA16 solid;
+}
+.login-input {
+    width: calc(100% - 2rem);
+}
+.center-div {
+    display: flex;
+    justify-content: center;
 }

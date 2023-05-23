@@ -1,5 +1,5 @@
 function create_empty() {
-    fetch('/profile/colors/create/', {
+    fetch('/profile/design/create/', {
         method: 'GET'
     });
 }
@@ -11,5 +11,5 @@ document.getElementById('emp').addEventListener('click', function () {
 
 document.getElementById('own').addEventListener('click', function () {
     create_empty();
-    window.open('/profile/colors/edit', '_self');
+    window.open('/profile/design/edit', '_self');
 });

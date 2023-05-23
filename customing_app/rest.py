@@ -5,7 +5,7 @@ from django.db.models import F
 
 from .decorators import profile_required, scheme_required
 from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, ColorForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm
+from .forms import ProfileForm, ColorForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm, ChangeColorForm, ChangeFontForm, ChangeButtonForm
 
 from bs4 import BeautifulSoup
 from requests import get
@@ -25,7 +25,7 @@ def create_profile(request):
             to_return['message'] = 'Your account already has a profile'
             return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
         cd = form.cleaned_data
-        new_profile = Profile(name=cd['username'], about=cd['about'], owner=request.user)
+        new_profile = Profile(name=cd['name'], about=cd['about'], owner=request.user)
         new_profile.save()
 
         to_return['message'] = 'Success!'
@@ -55,48 +55,48 @@ def create_scheme(request):
     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
 
-@login_required
-@scheme_required
-def edit_scheme(request):
-    to_return = {}
+# @login_required
+# @scheme_required
+# def edit_scheme(request):
+#     to_return = {}
 
-    profile = Profile.objects.filter(owner=request.user).first()
-    form = ColorForm(request.POST)
-    if form.is_valid():
-        scheme = profile.colors
-        color_object = form.cleaned_data["to_change"]
-        color = form.cleaned_data["color"]
+#     profile = Profile.objects.filter(owner=request.user).first()
+#     form = ColorForm(request.POST)
+#     if form.is_valid():
+#         scheme = profile.colors
+#         color_object = form.cleaned_data["to_change"]
+#         color = form.cleaned_data["color"]
 
-        if not profile.colors.check_color(color):
-            to_return['message'] = 'Wrong color'
-            return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
+#         if not profile.colors.check_color(color):
+#             to_return['message'] = 'Wrong color'
+#             return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
         
-        match color_object:
-            case "background":
-                scheme.background = color
-            case "font":
-                scheme.font = color
-            case "card":
-                scheme.card = color
-            case "button":
-                scheme.button = color
-            case "button_hover":
-                scheme.button_hover = color
-            case "button_click":
-                scheme.button_click = color
-            case "button_font":
-                scheme.button_font = color
+#         match color_object:
+#             case "background":
+#                 scheme.background = color
+#             case "font":
+#                 scheme.font = color
+#             case "card":
+#                 scheme.card = color
+#             case "button":
+#                 scheme.button = color
+#             case "button_hover":
+#                 scheme.button_hover = color
+#             case "button_click":
+#                 scheme.button_click = color
+#             case "button_font":
+#                 scheme.button_font = color
 
-            case _:
-                to_return['message'] = 'Wrong object'
-                return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
+#             case _:
+#                 to_return['message'] = 'Wrong object'
+#                 return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
-        scheme.save()
-        to_return['message'] = 'Success!'
-        return HttpResponse(json.dumps(to_return), content_type="application/json")
-    else:
-        to_return['message'] = "invalid"
-    return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
+#         scheme.save()
+#         to_return['message'] = 'Success!'
+#         return HttpResponse(json.dumps(to_return), content_type="application/json")
+#     else:
+#         to_return['message'] = "invalid"
+#     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
 
 @login_required
@@ -199,6 +199,68 @@ def delete_link(request):
 
             to_delete.delete()
             return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
+
+@login_required
+@scheme_required
+def change_color(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    cd = json.loads(request.body)
+    form = ChangeColorForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        if scheme.set_color(cd['color_id'], cd['color_hash']):
+            return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
+
+@login_required
+@scheme_required
+def change_font(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    cd = json.loads(request.body)
+    form = ChangeColorForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        if scheme.set_font(cd['font_name']):
+            return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
+
+@login_required
+@scheme_required
+def change_button(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    cd = json.loads(request.body)
+    form = ChangeButtonForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        button = cd['button_id']
+        if len(button) == 4:
+            if button[0] == 's' and button[1].isdigit() and button[2] == '-' and button[3].isdigit():
+                scheme.button_type = int(button[1])
+                scheme.button_shape = int(button[3])
+                scheme.save()
+                return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
+
+@profile_required
+def edit_profile(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+    cd = json.loads(request.body)
+    form = ProfileForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        profile.name = cd['name']
+        profile.about = cd['about']
+        profile.save()
+        return HttpResponse('OK')
     return HttpResponse('oksimiron', status=400)
 
 # def search_icon(request):

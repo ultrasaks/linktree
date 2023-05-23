@@ -3,7 +3,7 @@ var color = $('#color_pick');
 function send_change() {
     $.ajax({
         type: 'POST',
-        url: '/profile/colors/change/',
+        url: '/profile/design/change/',
         data: {
             to_change: color_object.val(),
             color: color.val(),

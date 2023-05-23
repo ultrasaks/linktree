@@ -1,6 +1,8 @@
 from django.db import models
 import re
 
+AVAILABLE_FONTS = ('raleway', '')
+
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
@@ -54,17 +56,20 @@ class Link(models.Model):
 class ColorScheme(models.Model):
     owner = models.ForeignKey('customing_app.Profile', on_delete=models.CASCADE, blank=True, null=True)
 
+    # card = models.CharField(max_length=8, default='#15151E', verbose_name='card')
+    
+    button_shape = models.IntegerField(default=1) #1-3
+    button_type = models.IntegerField(default=1) # 1-4
+    
+    button_font = models.CharField(max_length=8, default='#D0EEFF', verbose_name='button font')
     background = models.CharField(max_length=8, default='#172C38', verbose_name='background')
     font = models.CharField(max_length=8, default='#FFFFFF', verbose_name='font')
-    card = models.CharField(max_length=8, default='#15151E', verbose_name='card')
-    
     button = models.CharField(max_length=8, default='#172C38', verbose_name='button')
-    button_shape = models.IntegerField(default=0) #0-2
-    button_type = models.IntegerField(default=0) # 0-3
-    button_font = models.CharField(max_length=8, default='#D0EEFF', verbose_name='button font')
-    # button_hover = models.CharField(max_length=8, default='#1C3746', verbose_name='button hover')
-    # button_click = models.CharField(max_length=8, default='#1272a5', verbose_name='button click')
-    #TODO: продумать
+    outline = models.CharField(max_length=8, default='#172C38', verbose_name='outline')
+    shadow = models.CharField(max_length=8, default='#FFFFFF', verbose_name='shadow')
+
+    font_name = models.CharField(max_length=8, default='#FFFFFF', verbose_name='font name')
+
 
     class Meta:
         db_table = 'ColorScheme'
@@ -73,13 +78,34 @@ class ColorScheme(models.Model):
     
     def __str__(self) -> str:
         return f'Схема {self.owner.name}'
-
-    # def get_colors(self) -> list:
-    #     return [self.background, self.font, self.card, self.button, self.button_hover, self.button_click, self.button_font]
-
-    # def get_colors_plural (self) -> dict:
-    #     return {'background': self.background, 'font': self.font, 'card': self.card, 'button': self.button, 
-    #     'button_hover': self.button_hover, 'button_click': self.button_click, 'button_font': self.button_font}
+    
+    def set_color(self, color_id:str, color_hash:str):
+        if self.check_color(color_hash):
+            color_id = color_id.replace('-color-input', '')
+            match color_id:
+                case "shadow":
+                    self.shadow = color_hash
+                case "button":
+                    self.button = color_hash
+                case "outline":
+                    self.outline = color_hash
+                case "button-text":
+                    self.button_font = color_hash
+                case "font":
+                    self.font = color_hash
+                case "background":
+                    self.background = color_hash
+                case _:
+                    return False
+            self.save()
+            return True
+        return False
+            
+                
+    def set_font(self, font:str):
+        if font in AVAILABLE_FONTS:
+            self.font_name = font
+            self.save()
 
     def check_color(self, color: str) -> bool:
         is_ok = re.search(r'^#[A-Fa-f0-9]{6}$', color)

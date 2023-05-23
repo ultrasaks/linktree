@@ -8,3 +8,4 @@ db.sqlite3
 .vscode
 venv
 link.zip
+.DS_Store

@@ -19,6 +19,6 @@ def scheme_required(view_func):
         if profile is None:
             return redirect('/')
         if profile.colors is None:
-            return redirect('/profile/colors/')
+            return redirect('/profile/design/')
         return view_func(request, *args, **kwargs)
     return _wrapped

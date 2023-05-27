@@ -51,7 +51,7 @@
         <center>
             <p>
                 <div class="card">
-                    <img class="profile-image" src="/">
+                    <img class="profile-image" src="{%if profile.image%}{{profile.image.url}}{%else%}ss{%endif%}">
                     <h3 class="center-display name">
                         {{profile.name}}
                     </h3>

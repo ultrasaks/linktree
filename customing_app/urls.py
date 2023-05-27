@@ -25,5 +25,7 @@ urlpatterns = [
     path('design/change/font/', rest.change_font),
     path('design/change/button/', rest.change_button),
 
-    path('change/', rest.edit_profile)
+    path('change/', rest.edit_profile),
+    path('image/', rest.upload_image),
+    path('image/delete/', rest.delete_image),
 ]

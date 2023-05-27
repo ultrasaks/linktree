@@ -10,12 +10,6 @@
     </div>
 </div>
 
-<!-- <div class="popup hid" id="color-popup">
-    <div class="card">
-        <i class="ti ti-x card-icon close-btn" onclick="javascript:close_popups()"></i>
-        
-    </div>
-</div> -->
 
 
 {% endblock %}
@@ -41,26 +35,30 @@
     </div>
 </div>
 {% else %}
-
 <div class="outlined-selector"></div>
 <div class="card-list">
     <h3>Профиль</h3>
     <div class="card">
         <div class="profile-top">
             <div class="ava-circle">
-                <img class="hid">
-                <avaname>{{profile.name.0.upper}}</avaname>
+                <img id="profile-image" {% if profile.image %}src="{{ profile.image.url }}"{%else%}class="hid"{% endif %} style="position: absolute">
+                <avaname {% if profile.image %}class="hid"{%endif%}>{{profile.name.0.upper}}</avaname>
             </div>
             <div class="buttons">
-                <div class="button">Выбрать изображение</div>
-                <div class="button">Удалить</div>
+                <form id="ava-form">
+                    <label for="avatar" class="button">Выбрать изображение</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="hid">
+                </form>
+                <div class="button" id="avatar-delete">Удалить</div>
             </div>
         </div>
         <div class="profile-middle">
             <input type="text" placeholder="Имя" id="username" value="{{profile.name}}">
             <input type="text" placeholder="Описание" id="about" value="{{profile.about}}">
         </div>
-        <div class="profile-bottom"></div>
+        <div class="profile-bottom">скругление
+            1 2 3
+        </div>
     </div>
 
 
@@ -183,6 +181,7 @@
 <script src="{% static 'scripts/colors_edit.js' %}"></script>
 <script>
     changeButton(document.getElementById('s{{scheme.button_type}}-{{scheme.button_shape}}'), false);
+
 </script>
 
 {% endif %}

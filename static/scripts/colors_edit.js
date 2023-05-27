@@ -2,8 +2,10 @@
 document.querySelector(".ava-circle").setAttribute('style', `width:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem);height:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem)`)
 const HEADERS = {"Content-Type": "application/json",'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value}
 
-const username = document.getElementById('username')
-const description = document.getElementById('about')
+const username = document.getElementById('username');
+const description = document.getElementById('about');
+const avaname = document.querySelector('avaname');
+const avapic = document.getElementById('profile-image');
 
 const outlinedSelector = document.querySelector(".outlined-selector");
 
@@ -21,7 +23,7 @@ function changeColor(elemId, value) {
 }
 
 function changeName() {
-    document.querySelector('avaname').innerHTML = username.value[0].toUpperCase()
+    avaname.innerHTML = username.value[0].toUpperCase()
     fetch("/profile/change/", {
         method: "POST",
         body: JSON.stringify({
@@ -47,9 +49,11 @@ function changeButton(element, send) {
     });
 }
 
+
 document.querySelectorAll('.color-description').forEach(inputElement => {
     inputElement.setAttribute('style', `width:${inputElement.clientHeight}px`)
 })
+avapic.setAttribute('style', '')
 colors = document.querySelectorAll('input[type=color]')
 colors.forEach(inputElement => {
     inputElement.addEventListener('blur', () => {
@@ -62,4 +66,31 @@ description.addEventListener('blur', () => { changeName() })
 
 document.querySelectorAll('.s').forEach(inputElement => {
     inputElement.addEventListener('click', () => { changeButton(inputElement, true) })
+})
+
+const avatarInput = document.getElementById('avatar')
+avatarInput.addEventListener('change', () => {
+    changeAvatar()
+})
+
+function changeAvatar() {
+    files = avatarInput.files
+    var formdata = new FormData(document.getElementById('ava-form'))
+
+    fetch("/profile/image/", {
+        method: "POST",
+        body: formdata,
+        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value}
+    }).then(response => response.json())
+.then(data => {
+    avapic.setAttribute('src', data['url'])
+    avaname.classList.add('hid')
+    avapic.classList.remove('hid')
+});
+}
+
+document.getElementById('avatar-delete').addEventListener('click', () => {
+    avaname.classList.remove('hid');
+    avapic.classList.add('hid');
+    fetch("/profile/image/delete/", {method: "GET"});
 })

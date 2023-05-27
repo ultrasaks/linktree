@@ -9,14 +9,13 @@ ADDITIONAL_CSS_BTNS = (
     r'box-shadow: 0px 3px 6px rgba({SHADOW_RGB}, 0.15);',
     r'box-shadow: 5px 5px 0px {SHADOW};transition-duration: 0s;}.button:hover {transform: translate(2px, 2px);box-shadow: 3px 3px 0px {SHADOW}'
 )
-BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.5rem 1rem;border-radius:{RADIUS};cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;{ADDITIONAL}}'
+BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.75rem 1rem;border-radius:{RADIUS};cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;text-decoration:none;{ADDITIONAL}}'
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     about = models.CharField(max_length=400)
     owner = models.ForeignKey('welcome_app.User', on_delete=models.CASCADE,)
 
-    # image = models.ImageField(default='default.jpg', upload_to='profile_pics') #TODO: загрузка изображения
-    #? Изображение конвертируется в jpeg/webp
+    image = models.ImageField(default='default.webp', upload_to='media')
     colors = models.ForeignKey('customing_app.ColorScheme', on_delete=models.CASCADE, blank=True, null=True)
     #TODO: статистика
 

@@ -13,7 +13,7 @@ with open(f'{BASE_DIR}/link/secret_key.ini', 'r') as key:
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] #? 'mylink.pythonanywhere.com'
-CSRF_TRUSTED_ORIGINS = ['https://mylink.pythonanywhere.com', 'https://7baf-37-146-233-217.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://mylink.pythonanywhere.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -103,10 +103,9 @@ STATICFILES_DIRS = [
      os.path.join(BASE_DIR, "static"),
 ]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-with open(f'{BASE_DIR}/link/icons.json', 'r') as icons, open(f'{BASE_DIR}/link/no_brand.json', 'r') as icons_n:
-    #! copyright - github.com/tabler/tabler-icons
-    BRAND_ICONS = json.loads(icons.read())
-    NO_BRAND = json.loads(icons_n.read())
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

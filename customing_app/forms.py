@@ -6,11 +6,6 @@ class ProfileForm(forms.Form):
     about = forms.CharField(max_length=400)
 
 
-class ColorForm(forms.Form):
-    to_change = forms.CharField()
-    color = forms.CharField()
-
-
 class LinkEditForm(forms.Form):
     id = forms.IntegerField()
     url = forms.CharField()
@@ -41,3 +36,12 @@ class ChangeButtonForm(forms.Form):
 
 class ChangeFontForm(forms.Form):
     font_name = forms.CharField()
+
+
+class ProfilePicForm(forms.Form):
+    avatar = forms.ImageField()
+    
+    class Meta:
+        widgets = {
+            'avatar': forms.ClearableFileInput(),
+        }

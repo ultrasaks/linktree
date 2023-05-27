@@ -1,17 +1,19 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.db.models import F
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .decorators import profile_required, scheme_required
 from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, ColorForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm, ChangeColorForm, ChangeFontForm, ChangeButtonForm
+from .forms import ProfileForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm, ChangeColorForm, ChangeFontForm, ChangeButtonForm, ProfilePicForm
 
 from bs4 import BeautifulSoup
 from requests import get
 from re import compile
+from PIL import Image
+from os import remove
 
 import json
+import io
 
 url_pattern = compile(r'/^([a-z]+:\/\/)?([a-z0-9-]+\.)?[a-z0-9-]+\.[a-z]+(\/.*)?$/i')
 
@@ -263,10 +265,58 @@ def edit_profile(request):
         return HttpResponse('OK')
     return HttpResponse('oksimiron', status=400)
 
-# def search_icon(request):
-#     settings.BRAND_ICONS
 
-# яркость определяется по HSV(v)
+
+@login_required
+@scheme_required
+def upload_image(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+
+    form = ProfilePicForm(request.POST, request.FILES)
+
+    if form.is_valid():
+        image = form.cleaned_data['avatar']
+        with io.BytesIO(image.read()) as image_stream:
+            with Image.open(image_stream) as pil_image:
+                pil_image = pil_image.convert('RGB')
+                pil_image = pil_image.resize((100, 100))
+                with io.BytesIO() as webp_stream:
+                    pil_image.save(webp_stream, format='webp')
+                    webp_file = InMemoryUploadedFile(
+                        webp_stream,
+                        'image',
+                        f'{random_hash()}.webp',
+                        'image/webp',
+                        webp_stream.getbuffer().nbytes,
+                        None
+                    )
+                    if profile.image.name:
+                        remove(profile.image.path)
+                    profile.image = webp_file
+                    profile.save()
+        
+        return HttpResponse(json.dumps({'ok':True, 'url':profile.image.url}), content_type="application/json")
+    return HttpResponse(json.dumps({'ok':False}), content_type="application/json", status=400)
+
+
+@login_required
+@scheme_required
+def delete_image(request):
+    profile = Profile.objects.filter(owner=request.user).first()
+    if profile.image is not None:
+        remove(profile.image.path)
+        profile.image = None
+        profile.save()
+    return HttpResponse('OK')
+
+
+
+
+def random_hash() -> str:
+    import secrets
+    import string
+
+    return ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(14)))
 
 
 # ENTITIES = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;"}

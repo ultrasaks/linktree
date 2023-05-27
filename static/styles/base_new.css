@@ -183,6 +183,7 @@ input[type=text]:focus {
     align-items: center;
     font-weight: 700;
     font-size: 1.5rem;
+    overflow: hidden;
 }
 .profile-top {
     display: flex;
@@ -200,6 +201,7 @@ input[type=text]:focus {
 .profile-top .buttons .button {
     width: 100%;
     margin-bottom: 0.5rem;
+    box-sizing: content-box;
 }
 .profile-middle {
     display: flex;
@@ -303,4 +305,10 @@ input[type=color] {
 }
 .s {
     transform: none!important;
+}
+avaname {
+    position: absolute;
+}
+.ava-circle image {
+    position: relative
 }

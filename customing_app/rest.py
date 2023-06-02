@@ -56,51 +56,6 @@ def create_scheme(request):
         return HttpResponse(json.dumps(to_return), content_type="application/json")
     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
 
-
-# @login_required
-# @scheme_required
-# def edit_scheme(request):
-#     to_return = {}
-
-#     profile = Profile.objects.filter(owner=request.user).first()
-#     form = ColorForm(request.POST)
-#     if form.is_valid():
-#         scheme = profile.colors
-#         color_object = form.cleaned_data["to_change"]
-#         color = form.cleaned_data["color"]
-
-#         if not profile.colors.check_color(color):
-#             to_return['message'] = 'Wrong color'
-#             return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
-        
-#         match color_object:
-#             case "background":
-#                 scheme.background = color
-#             case "font":
-#                 scheme.font = color
-#             case "card":
-#                 scheme.card = color
-#             case "button":
-#                 scheme.button = color
-#             case "button_hover":
-#                 scheme.button_hover = color
-#             case "button_click":
-#                 scheme.button_click = color
-#             case "button_font":
-#                 scheme.button_font = color
-
-#             case _:
-#                 to_return['message'] = 'Wrong object'
-#                 return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
-
-#         scheme.save()
-#         to_return['message'] = 'Success!'
-#         return HttpResponse(json.dumps(to_return), content_type="application/json")
-#     else:
-#         to_return['message'] = "invalid"
-#     return HttpResponse(json.dumps(to_return), status=400, content_type="application/json")
-
-
 @login_required
 @scheme_required
 def create_link(request):
@@ -279,7 +234,7 @@ def upload_image(request):
         with io.BytesIO(image.read()) as image_stream:
             with Image.open(image_stream) as pil_image:
                 pil_image = pil_image.convert('RGB')
-                pil_image = pil_image.resize((100, 100))
+                pil_image = pil_image.resize((200, 200))
                 with io.BytesIO() as webp_stream:
                     pil_image.save(webp_stream, format='webp')
                     webp_file = InMemoryUploadedFile(

@@ -18,7 +18,7 @@ def links(request):
     profile = Profile.objects.filter(owner=request.user).first()
     links = Link.objects.filter(user_profile=profile).order_by('position')
 
-    return render(request, 'links_new.html', {'title': 'Изменение цвета', 'links': links, 'selected': 1})
+    return render(request, 'links.html', {'title': 'Изменение цвета', 'links': links, 'selected': 1})
 
 
 
@@ -36,16 +36,6 @@ def statistics(request):
     profile = Profile.objects.filter(owner=request.user).first()
     color_scheme = profile.colors
     return render(request, 'stats.html', {'title': 'Статистика профиля', 'scheme': color_scheme, 'selected': 3})
-
-
-
-
-@login_required
-@scheme_required
-def colors_edit(request):
-    profile = Profile.objects.filter(owner=request.user).first()
-    color_scheme = profile.colors
-    return render(request, 'colors_edit.html', {'title': 'Изменение цвета', 'scheme': color_scheme, 'selected': 2})
 
 
 @login_required

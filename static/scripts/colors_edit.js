@@ -1,6 +1,5 @@
 
-document.querySelector(".ava-circle").setAttribute('style', `width:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem);height:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem)`)
-const HEADERS = {"Content-Type": "application/json",'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value}
+const HEADERS = { "Content-Type": "application/json", 'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value }
 
 const username = document.getElementById('username');
 const description = document.getElementById('about');
@@ -49,11 +48,31 @@ function changeButton(element, send) {
     });
 }
 
+function changeAvatar() {
+    files = avatarInput.files
+    var formdata = new FormData(document.getElementById('ava-form'))
+
+    fetch("/profile/image/", {
+        method: "POST",
+        body: formdata,
+        headers: { 'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value }
+    }).then(response => { if (response.ok) { return response.json() } throw new Error(''); })
+        .then(data => {
+            avapic.setAttribute('src', data['url'])
+            avaname.classList.add('hid')
+            avapic.classList.remove('hid')
+        }).catch((error) => {
+            alert('Плохая у тебя картинка');
+        });
+}
+
+document.querySelector(".ava-circle").setAttribute('style', `width:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem);height:calc(${document.querySelector(".ava-circle").clientHeight}px - 4rem)`)
 
 document.querySelectorAll('.color-description').forEach(inputElement => {
     inputElement.setAttribute('style', `width:${inputElement.clientHeight}px`)
 })
-avapic.setAttribute('style', '')
+avapic.setAttribute('style', `width:${document.querySelector(".ava-circle").clientHeight}px`)
+
 colors = document.querySelectorAll('input[type=color]')
 colors.forEach(inputElement => {
     inputElement.addEventListener('blur', () => {
@@ -73,24 +92,9 @@ avatarInput.addEventListener('change', () => {
     changeAvatar()
 })
 
-function changeAvatar() {
-    files = avatarInput.files
-    var formdata = new FormData(document.getElementById('ava-form'))
-
-    fetch("/profile/image/", {
-        method: "POST",
-        body: formdata,
-        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value}
-    }).then(response => response.json())
-.then(data => {
-    avapic.setAttribute('src', data['url'])
-    avaname.classList.add('hid')
-    avapic.classList.remove('hid')
-});
-}
 
 document.getElementById('avatar-delete').addEventListener('click', () => {
     avaname.classList.remove('hid');
     avapic.classList.add('hid');
-    fetch("/profile/image/delete/", {method: "GET"});
+    fetch("/profile/image/delete/", { method: "GET" });
 })

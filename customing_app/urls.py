@@ -7,7 +7,6 @@ urlpatterns = [
     path('links/', views.links),
     path('design/', views.colors),
 
-    path('design/edit/', views.colors_edit),
     path('design/test/', views.link_test),
 
     # path('links/edit/legacy', views.links_edit),

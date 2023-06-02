@@ -3,7 +3,7 @@ from django import forms
 
 class ProfileForm(forms.Form):
     name = forms.CharField(max_length=100)
-    about = forms.CharField(max_length=400)
+    about = forms.CharField(max_length=400, required=False)
 
 
 class LinkEditForm(forms.Form):

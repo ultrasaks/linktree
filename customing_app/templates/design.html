@@ -41,7 +41,7 @@
     <div class="card">
         <div class="profile-top">
             <div class="ava-circle">
-                <img id="profile-image" {% if profile.image %}src="{{ profile.image.url }}"{%else%}class="hid"{% endif %} style="position: absolute">
+                <img id="profile-image" {% if profile.image %}src="{{ profile.image.url }}"{%else%}class="hid"{% endif %} style="position: absolute;width:0px;">
                 <avaname {% if profile.image %}class="hid"{%endif%}>{{profile.name.0.upper}}</avaname>
             </div>
             <div class="buttons">

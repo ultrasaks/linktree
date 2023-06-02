@@ -3,19 +3,20 @@ import re
 
 AVAILABLE_FONTS = ('raleway', '')
 RADIUSES = ('0', '.5', '1.5',)
+AVA_RADIUSES = ('0', '10', '25', '50')
 ADDITIONAL_CSS_BTNS = (
     '',
     r'background:transparent;outline:{OUTLINE} 2px solid;',
     r'box-shadow: 0px 3px 6px rgba({SHADOW_RGB}, 0.15);',
-    r'box-shadow: 5px 5px 0px {SHADOW};transition-duration: 0s;}.button:hover {transform: translate(2px, 2px);box-shadow: 3px 3px 0px {SHADOW}'
+    r'box-shadow: 5px 5px 0px {SHADOW};transition-duration: 0s;}.button:hover {transform: translate(2px, 2px);box-shadow: 3px 3px 0px {SHADOW}' #outline:{OUTLINE} 2px solid;
 )
-BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.75rem 1rem;border-radius:{RADIUS};cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;text-decoration:none;{ADDITIONAL}}'
+BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.75rem 1rem;border-radius:{RADIUS}rem;cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;text-decoration:none;{ADDITIONAL}}'
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     about = models.CharField(max_length=400)
     owner = models.ForeignKey('welcome_app.User', on_delete=models.CASCADE,)
 
-    image = models.ImageField(default='default.webp', upload_to='media')
+    image = models.ImageField(upload_to='media', null=True)
     colors = models.ForeignKey('customing_app.ColorScheme', on_delete=models.CASCADE, blank=True, null=True)
     #TODO: статистика
 
@@ -63,6 +64,7 @@ class ColorScheme(models.Model):
 
     # card = models.CharField(max_length=8, default='#15151E', verbose_name='card')
     
+    avatar_shape = models.IntegerField(default=4) #1-4
     button_shape = models.IntegerField(default=1) #1-3
     button_type = models.IntegerField(default=1) # 1-4
     
@@ -122,6 +124,8 @@ class ColorScheme(models.Model):
             baza = baza.replace(r'{SHADOW_RGB}', hex_to_rgb(self.shadow))
         return baza
 
+    def get_ava_radius(self) -> str:
+        return AVA_RADIUSES[self.avatar_shape-1]
 
 
     def check_color(self, color: str) -> bool:

@@ -1,15 +1,15 @@
 {% include 'base.html' %}
 
 {% block header %}
-<center class="landing-nav">
+<header>
     <nav>
-        <a class="button" href="/login">Войти</a>
+        <div class="desktop-only"></div>
+        <div class="desktop-only"><a class="button" href="/login">Войти</a></div>
     </nav>
-</center>
+</header>
 {% endblock %}
 
 {% block content %}
-<div class="landing-welcome">Привет!</div>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<h1 class="landing-welcome">Привет!</h1>
 
 {% endblock %}

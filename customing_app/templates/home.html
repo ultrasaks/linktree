@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <p>
                     <label for="id_username">Имя</label><br>
-                    <input type="text" id="id_username" name="id_username" class="login-input" autocomplete="off">
+                    <input type="text" id="id_username" name="id_username" class="login-input" autocomplete="off" value="{{user.username}}">
                 </p>
                 <p>
                     <label for="id_about">Описание</label><br>

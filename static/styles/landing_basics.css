@@ -1,0 +1,93 @@
+.helptext {
+    color: #656460;
+    font-size: 70%;
+}
+
+form {
+    position: relative;
+    padding-bottom: 4rem;
+}
+
+.button-group {
+    position: absolute;
+    right: 1rem;
+    display: flex;
+}
+
+form .btn-outline {
+    position: relative;
+    right: 1rem;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-3px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(3px, 0, 0);
+    }
+}
+
+.edit-error {
+    animation: shake 0.32s cubic-bezier(.36, .07, .19, .97) both;
+    transition-duration: .22s !important;
+    background-color: #f5cece !important;
+    color: #a22f2f !important;
+}
+
+.landing-outlined {
+    border: #F4CA16 2px solid!important;
+    outline: none!important;
+}
+.errtext {color: #a22f2f}
+.oktext {color: #087708;}
+
+.landing-welcome {
+    margin-top: 6rem;
+    justify-content: center;
+    display: flex;
+    font-size: 500%;
+}
+
+@media (max-width: 800px) {
+    .landing-welcome {
+        font-size: 300%;
+    }
+    #block1 img {
+        width: 35vh;
+        margin-top: 2rem;
+    } 
+    #block1 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        margin-top: 2rem;
+    }
+}
+
+#block1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #211b03;
+}
+#block1 img {
+    width: 50vh;
+}

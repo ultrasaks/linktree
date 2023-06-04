@@ -2,10 +2,10 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy
-from django.contrib.auth.validators import UnicodeUsernameValidator
 
 from uuid import uuid4
 
+from .validators import UnicodeUsernameValidator
 from .managers import CustomUserManager
 
 

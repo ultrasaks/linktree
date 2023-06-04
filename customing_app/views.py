@@ -9,7 +9,7 @@ from .decorators import profile_required, scheme_required
 @login_required
 def home(request):
     profile = Profile.objects.filter(owner=request.user).first()
-    return render(request, 'home.html', {'title': 'Настройка профиля', 'profile': profile})
+    return render(request, 'home.html', {'title': 'Настройка профиля', 'profile': profile, 'user': request.user})
 
 
 @login_required

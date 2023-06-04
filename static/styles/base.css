@@ -33,11 +33,14 @@ nav {
     .item .ti {
         margin: 0px!important;
     } 
-}
-@media (min-width: 800px) {
-    /* .mobile-only{
-        display: none;
-    } */
+    .btn-row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: initial;
+    }
+    .btn-row .button {
+        width: 100%;
+    }
 }
 
 nav a, nav div {
@@ -90,7 +93,7 @@ nav a:hover{
 }
 .button{
     background-color: #F4CA16;
-    color: black;
+    color: #433601;
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 1.5rem;
@@ -102,6 +105,10 @@ nav a:hover{
     transition: transform ease-out .15s;
     border-color: transparent;
 }
+.button:disabled{background: #c1c0b0;
+    color: #5e594e;
+cursor: auto;
+transform: scale(1)!important;}
 .button:hover{
     transform: scale(1.05);
 }
@@ -245,16 +252,6 @@ input[type=text]:focus, input[type=email]:focus, input[type=password]:focus {
 .btn-hard-shadow:hover {
     transform: translate(2px, 2px);
     box-shadow: 3px 3px 0px #000;
-}
-@media (max-width: 800px) {
-    .btn-row {
-        flex-direction: column;
-        align-items: center;
-        justify-content: initial;
-    }
-    .btn-row .button {
-        width: 100%;
-    }
 }
 .color-description {
     display: flex;

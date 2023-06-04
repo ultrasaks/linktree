@@ -10,7 +10,7 @@ ADDITIONAL_CSS_BTNS = (
     r'box-shadow: 0px 3px 6px rgba({SHADOW_RGB}, 0.15);',
     r'box-shadow: 5px 5px 0px {SHADOW};transition-duration: 0s;}.button:hover {transform: translate(2px, 2px);box-shadow: 3px 3px 0px {SHADOW}' #outline:{OUTLINE} 2px solid;
 )
-BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.75rem 1rem;border-radius:{RADIUS}rem;cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;text-decoration:none;{ADDITIONAL}}'
+BTN_BASE = r'.button:hover{transform: scale(1.05);}.button{background:{BTN};color:{BTN_FONT};font-weight:600;padding:.75rem 1rem;border-radius:{RADIUS}rem;cursor:pointer;display:flex;justify-content:center;align-items:center;box-sizing:border-box;transition:transform .15s ease-out;border-color:transparent;text-decoration:none;margin-bottom:1rem;{ADDITIONAL}}'
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     about = models.CharField(max_length=400)

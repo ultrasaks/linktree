@@ -1,47 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<style>
-    .helptext {
-        color: #656460;
-        font-size: 70%;
-    }
-    #regform {
-        position: relative;
-        padding-bottom: 4rem;
-    }
-    .button-group {
-        position: absolute;
-        right: 1rem;
-        display: flex;
-    }
-    #regform .btn-outline {
-        position: relative;
-        right: 1rem;
-    }
-    @keyframes shake {
-        10%, 90% {
-        transform: translate3d(-1px, 0, 0);
-        }
-        
-        20%, 80% {
-        transform: translate3d(2px, 0, 0);
-        }
-    
-        30%, 50%, 70% {
-        transform: translate3d(-3px, 0, 0);
-        }
-    
-        40%, 60% {
-        transform: translate3d(3px, 0, 0);
-    }
-  }
-  .edit-error {
-    animation: shake 0.32s cubic-bezier(.36,.07,.19,.97) both;
-    transition-duration: .22s!important;
-    background-color: #f5cece!important;
-    color: #a22f2f!important;
-  }
-</style>
 <div class="card-list">
     <div class="card">
         <h1 id="card-title">Придумайте себе псевдоним</h1>
@@ -52,9 +11,9 @@
             {% csrf_token %}
             <div id="name-container">
                 <p>
-                    <label for="id_username">Имя пользователя</label><br>
+                    <label for="id_username">Никнейм</label><br>
                     <input class="login-input lineedit" type="text" name="username" maxlength="50" required="" id="id_username"><br>
-                    <span class="helptext">Не более 50 символов: буквы, цифры и @/./+/-/_<br>Позднее может быть изменено в настройках</span>
+                    <div class="helptext">Не более 50 символов: буквы, цифры и +  - _<br>Позднее может быть изменено в настройках</div>
                 </p>
 
                 <p>
@@ -66,7 +25,8 @@
                 <p>
                     <label for="id_password">Пароль</label><br>
                     <input class="login-input lineedit" type="password" name="password" required="" id="id_password"><br>
-                    <span class="helptext">Пароль должен содержать минимум 6 символов: цифры и латинские буквы в мелкой и большой раскладке</span>
+                    <div class="helptext" id="password_help1">Пароль должен содержать минимум 6 символов: цифры и латинские буквы в мелкой и большой раскладке</div>
+                    <div class="helptext" id="password_help2">Пароли должны совпадать</div>
                 </p>
 
                 <p>
@@ -78,9 +38,9 @@
                 </div>
             </div>
             <p class="button-group"> 
-                <button class="button btn-outline" type="button" onclick="window.open('/login','_self')">Войти</button>
+                <button class="button btn-outline landing-outlined" type="button" onclick="window.open('/login','_self')">Войти</button>
                 <button type="button" class="button" id="name-button">Далее</button>
-                <button type="submit" class="button hid" id="whole-button">Создать</button>
+                <button type="submit" class="button hid" id="whole-button" disabled>Создать</button>
             </p>
                 
         </form>
@@ -88,56 +48,5 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script>
-    const namebutton = document.getElementById('name-button');
-    const wholebutton = document.getElementById('whole-button');
-
-    namebutton.addEventListener('click', () => { checkName() });
-    document.getElementById('id_username').addEventListener('click', () => { rem_error('id_username') });
-    document.getElementById('id_email').addEventListener('click', () => { rem_error('id_email') });
-
-    function rem_error(elem_id) {
-        document.getElementById(elem_id).classList.remove('edit-error')
-    }
-    function add_error(elem_id){
-        document.getElementById(elem_id).classList.add('edit-error')
-    }
-
-    function checkName() {
-        var formdata = new FormData(document.getElementById('regform'))
-
-        rem_error('id_email')
-        rem_error('id_username')
-        fetch("/signup/first/", {
-        method: "POST",
-        body: formdata,
-        headers: { 'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value }
-        }).then(response => response.json().then(data => ({status: data.status}))
-
-            .then(data => {
-                switch (data.status) {
-                    case 0:
-                        console.log('email');
-                        add_error('id_email')
-                        break;
-                    case 1:
-                        console.log('username');
-                        add_error('id_username')
-                        break;
-                    case 2:
-                        console.log('wrong');
-                        add_error('id_email')
-                        add_error('id_username')
-                        break;
-                    default:
-                        document.getElementById('password-container').classList.remove('hid')
-                        document.getElementById('name-container').classList.add('hid')
-                        namebutton.classList.add('hid')
-                        wholebutton.classList.remove('hid')
-                        document.getElementById('card-title').innerHTML = 'Придумайте пароль'
-                }
-                
-            }))
-    }
-</script>
+<script src="{% static 'scripts/signup.js' %}"></script>
 {% endblock %}

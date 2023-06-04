@@ -1,4 +1,5 @@
 {% include 'base.html' %}
+{% load static %}
 
 {% block header %}
 <header>
@@ -11,5 +12,18 @@
 
 {% block content %}
 <h1 class="landing-welcome">Привет!</h1>
-
+<div class="center-div">
+    <div id="block1">
+        MYLink - удобный способ делиться своими контактами со всякими челиками да
+        <img src="{% static 'images/floating-sample.webp' %}">
+    </div>
+</div>
+<div id="block2">
+    <h2>Персонализация</h2>
+    MYLink - удобный способ делиться своими контактами со всякими челиками да
+</div>
+<div id="block3">
+    <h2>рататата</h2>
+    моргенштерн
+</div>
 {% endblock %}

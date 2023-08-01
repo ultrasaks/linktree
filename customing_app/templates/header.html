@@ -3,7 +3,8 @@
         <div class="desktop-only">
             <a class="item {% if selected == 1 %}nav-chosen{% endif %}" href="/profile/links/"><i class="ti ti-id"></i> Ссылки</a>
             <a class="item {% if selected == 2 %}nav-chosen{% endif %}" href="/profile/design/"><i class="ti ti-circle-square"></i> Дизайн</a>
-            <a class="item {% if selected == 3 %}nav-chosen{% endif %}" href="/profile/stats/"><i class="ti ti-chart-bar"></i> Статистика</a>
+            <a class="item {% if selected == 3 %}nav-chosen{% endif %}" href="/l/{{user.username}}"><i class="ti ti-chart-bar"></i> Моя страница</a>
+            <!-- <a class="item {% if selected == 3 %}nav-chosen{% endif %}" href="/profile/stats/"><i class="ti ti-chart-bar"></i> Статистика</a> -->
         </div>
         <div class="desktop-only">
             <a class="item" href="/logout"><i class="ti ti-exit"></i><i class="ti ti-logout"></i> Выйти</a>

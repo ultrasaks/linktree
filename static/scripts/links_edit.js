@@ -53,7 +53,7 @@ function request_name_change(id, name, url) {
         "Content-Type": "application/json",
         'X-CSRFToken': csrf
       },
-    })
+    }).then(response => {update_frame()})
 }
 
 
@@ -67,7 +67,7 @@ function del_link(id) {
         "Content-Type": "application/json",
         'X-CSRFToken': csrf
       },
-    })
+    }).then(response => {update_frame()})
     document.getElementById(`${id}c`).remove()
 }
 
@@ -122,6 +122,7 @@ function create_url() {
     .then(data => {
       add_card(data)
       close_popup();
+      update_frame();
   });}else{
     popupError.innerHTML = 'Неправильный формат ссылки'
   }
@@ -167,7 +168,7 @@ function send_pos_change(id, where) {
         "Content-Type": "application/json",
         'X-CSRFToken': csrf
       },
-    })
+    }).then(response => {update_frame()})
 }
 
 function add_card(data) {

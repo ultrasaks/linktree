@@ -6,7 +6,7 @@ from customing_app.models import Profile, Link
 from welcome_app.models import User
 
 # Create your views here.
-def link_show(request, alias:str=None):
+def link_show(request, alias:str=None, is_widget=False):
     if alias is None:
         return render(request, 'base.html', {'title': 'Not found'}) #404
     alias = alias.lower()
@@ -19,6 +19,8 @@ def link_show(request, alias:str=None):
     if profile:
         color_scheme = profile.colors
         links = Link.objects.filter(user_profile=profile).order_by('position')
-        if color_scheme and links:
-            return render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'links': links})
+        if color_scheme is not None and links is not None:
+            response = render(request, 'test.html', {'scheme': color_scheme, 'profile': profile, 'links': links, 'widget': is_widget})
+            response['X-Frame-Options'] = 'ALLOWALL'
+            return response
     return render(request, 'base.html', {'title': 'Not found'}) #404

@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserChangeForm
 from .models import User
 import re
 
+PASSWORD_REGEX = '((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,})'
+
+
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -25,7 +28,7 @@ class RegisterForm(forms.ModelForm):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
             raise forms.ValidationError("Пароли не совпадают.")
-        if re.search('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,})', cd['password']) is None:
+        if re.search(PASSWORD_REGEX, cd['password']) is None:
             raise forms.ValidationError("Пароль не содержит одного из перечисленных символов")
         return cd['password2']
 

@@ -13,17 +13,24 @@
 {% block content %}
 <h1 class="landing-welcome">Привет!</h1>
 <div class="center-div">
-    <div id="block1">
-        MYLink - удобный способ делиться своими контактами со всякими челиками да
+    <div class="block">
+        MYLink - удобный способ делиться своими ссылками.<br>С кем угодно.
         <img src="{% static 'images/floating-sample.webp' %}">
     </div>
 </div>
-<div id="block2">
-    <h2>Персонализация</h2>
-    MYLink - удобный способ делиться своими контактами со всякими челиками да
+<div class="center-div">
+    <div class="block" id="b2">
+        Что угодно, как угодно.<br>Персонализируйте свой профиль под себя
+        <img src="{% static 'images/personalization.webp' %}">
+    </div>
 </div>
-<div id="block3">
-    <h2>рататата</h2>
-    моргенштерн
+
+<div class="block">
+    <!-- <h2>рататата</h2>
+    моргенштерн -->
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer><a href="https://github.com/ultrasaks">github</a></footer>
 {% endblock %}

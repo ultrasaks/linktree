@@ -1,9 +1,13 @@
+import re
+
 from django.shortcuts import HttpResponse
 
 from json import loads, dumps
 
 from .forms import RegisterP1Form 
-from .models import User
+from .models import User, UnicodeUsernameValidator
+
+USERNAME_REGEX = UnicodeUsernameValidator.regex
 
 
 def register_part_1(request):
@@ -12,7 +16,7 @@ def register_part_1(request):
         cd = form.cleaned_data
         if User.objects.filter(email=cd['email']).first() is not None:
             return HttpResponse(dumps({'status': 0}), content_type="application/json")
-        elif User.objects.filter(username=cd['username']).first() is not None:
+        elif User.objects.filter(username=cd['username']).first() is not None or re.search(USERNAME_REGEX, cd['username']) is None:
             return HttpResponse(dumps({'status': 1}), content_type="application/json")
         
         return HttpResponse(dumps({'status': 'success'}), content_type="application/json")

@@ -1,0 +1,85 @@
+
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="stylesheet" href=""> -->
+    </head>
+    <body>
+        <div class="outlined-selector" id="selector_font"></div>
+        <style>
+            body {
+                background-color: #FFFDF8;
+                font-family: 'Raleway', sans-serif;
+            }
+            .outlined-selector {
+                background: transparent;
+                border-radius: 0.5rem;
+                border: 2px #F4CA16 solid;
+                position: absolute;
+                left: -9999px;
+            }
+            .font-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                padding: 1rem;
+            }
+            .font {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+            }
+            .font-image {
+                border-radius: 1.5rem;
+            }
+            .font-text {
+                margin-top: 0.5rem;
+            }
+        </style>
+        <div class="font-search"></div>
+        <div class="font-table">
+            {% for row in fonts %}
+            <div class="font-row">
+                {% for font in row %}
+                    <div class="font" id="font_{{font.0}}">
+                        <img class="font-image" src="/media/fonts/{{font.2}}.webp">
+                        <div class="font-text">{{font.1}}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% csrf_token %}
+        <script>
+            const HEADERS = { "Content-Type": "application/json", 'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value }
+
+            const outlinedSelector = document.getElementById('selector_font');
+            function set_selector(element, send) {
+                outlinedSelector.style.top = element.offsetTop - 7 + "px";
+                outlinedSelector.style.left = element.offsetLeft - 7 + "px";
+                outlinedSelector.style.width = element.clientWidth + 10 + "px";
+                outlinedSelector.style.height = element.clientHeight + 10 + "px";
+                if (!send) { return }
+                fetch("/profile/design/change/font_type/", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        font_name: element.id,
+                    }),
+                    headers: HEADERS,
+                })
+            }
+            document.querySelectorAll('.font').forEach(inputElement => {
+                inputElement.addEventListener('click', () => { set_selector(inputElement, true) })
+            })
+        </script>
+        <script>
+            {% if user_font != None %}
+                setTimeout(function () {set_selector(document.getElementById('font_{{user_font.id}}', false))}, 200);
+                
+            {% endif %}
+        </script>
+    </body>
+</html>

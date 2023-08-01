@@ -11,11 +11,11 @@
     </head>
     <body>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family={{scheme.get_font}}:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
             html {
                 background-color: {{ scheme.background }};
                 color: {{ scheme.font }};
-                font-family: 'Noto Sans';
+                font-family: '{{ scheme.name_font }}';
             }
             .center-display {
                 display: flex;
@@ -47,11 +47,15 @@
                 width: 5rem;height: 5rem;
                 overflow: hidden;
             }
+            .profile-image img {
+                width: 5rem;
+            }
         </style>
         <center>
             <p>
                 <div class="card">
-                    <img class="profile-image" src="{%if profile.image%}{{profile.image.url}}{%else%}ss{%endif%}">
+                    <div class="profile-image">{%if profile.image%}<img src="{{profile.image.url}}">{%else%}{{profile.name.0.upper}}{%endif%}</div>
+                    
                     <h3 class="center-display name">
                         {{profile.name}}
                     </h3>
@@ -61,8 +65,9 @@
                 </div>
             </p>
             <div class="button-list">
+                
                 {% for link in links %}
-                <a class="button" href="https://{{link.url}}">
+                <a class="button" {% if is_widget == False %} href="https://{{link.url}}"{% else %} href="#"{% endif %}>
                     <i class="ti ti-{{link.icon}}"></i>
                     {{link.title}}
                 </a>

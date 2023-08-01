@@ -20,7 +20,7 @@ def home(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect('/profile/links')
     message = None
 
     if request.method == 'POST':
@@ -32,7 +32,7 @@ def login_view(request):
                 if user.is_active:
                     login(request, user)
                     if 'next' not in request.GET:
-                        return redirect('/')
+                        return redirect('/profile/links')
                     return redirect(request.GET['next'])
                 else:
                     message = 'Данный аккаунт заблокирован.'

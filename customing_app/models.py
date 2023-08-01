@@ -1,7 +1,8 @@
 from django.db import models
 import re
 
-AVAILABLE_FONTS = ('raleway', '')
+LINK_REGEX = r'^[A-Za-z0-9_-]+\.[a-zA-Z]'
+COLOR_REGEX = r'^#[A-Fa-f0-9]{6}$'
 RADIUSES = ('0', '.5', '1.5',)
 AVA_RADIUSES = ('0', '10', '25', '50')
 ADDITIONAL_CSS_BTNS = (
@@ -64,7 +65,7 @@ class ColorScheme(models.Model):
 
     # card = models.CharField(max_length=8, default='#15151E', verbose_name='card')
     
-    avatar_shape = models.IntegerField(default=4) #1-4
+    avatar_shape = models.IntegerField(default=3) #1-4
     button_shape = models.IntegerField(default=1) #1-3
     button_type = models.IntegerField(default=1) # 1-4
     
@@ -75,7 +76,8 @@ class ColorScheme(models.Model):
     outline = models.CharField(max_length=8, default='#172C38', verbose_name='outline')
     shadow = models.CharField(max_length=8, default='#FFFFFF', verbose_name='shadow')
 
-    font_name = models.CharField(max_length=8, default='#FFFFFF', verbose_name='font name')
+    font_name = models.ForeignKey('customing_app.Font', on_delete=models.CASCADE, blank=True, null=True)
+
 
 
     class Meta:
@@ -108,10 +110,14 @@ class ColorScheme(models.Model):
             return True
         return False
             
-    def set_font(self, font:str):
-        if font in AVAILABLE_FONTS:
+    def set_font(self, font):
+        font_id = int(font.split('_')[1])
+        font = Font.objects.filter(id=font_id).first()
+        if font is not None:
             self.font_name = font
             self.save()
+            return True
+        return False
 
     def get_button_css(self) -> str:
         baza = BTN_BASE.replace(r'{ADDITIONAL}', ADDITIONAL_CSS_BTNS[self.button_type-1])
@@ -125,14 +131,62 @@ class ColorScheme(models.Model):
         return baza
 
     def get_ava_radius(self) -> str:
-        return AVA_RADIUSES[self.avatar_shape-1]
+        return AVA_RADIUSES[self.avatar_shape]
 
+    def get_font(self):
+        if self.font_name is not None:
+            return self.font_name.gfont()
+        return Font.objects.first().gfont()
+    
+    def name_font(self):
+        if self.font_name is not None:
+            return self.font_name.name
+        return Font.objects.first().name
+    
+    def img_font(self):
+        if self.font_name is not None:
+            return self.font_name.img_name
+        return Font.objects.first().img_name
 
     def check_color(self, color: str) -> bool:
-        is_ok = re.search(r'^#[A-Fa-f0-9]{6}$', color)
+        is_ok = re.search(COLOR_REGEX, color)
         if is_ok is None:
             return False
         return True
+
+class Font(models.Model):
+    name = models.CharField(max_length=40, verbose_name='Название шрифта')
+    img_name = models.CharField(max_length=40, verbose_name='картинка')
+
+    def __str__(self) -> str:
+        return f'Шрифт {self.name}'
+    
+    def as_json(self) -> tuple:
+        return [self.id, self.name, self.img_name]
+    
+    def gfont(self):
+        return self.name.title().replace(' ', '+')
+
+    class Meta:
+        db_table = 'Fonts'
+        verbose_name = 'шрифт'
+        verbose_name_plural = 'шрифты'
+
+
+def add_fonts():
+    "Создаёт модели шрифтов, запускать если их нет"
+    with open("font_pic_generator/font_list.txt", "r") as file:
+        font_list = file.read().splitlines()
+    for font in font_list:
+        new_font = Font()
+        new_font.name = font.title()
+        new_font.img_name = font.replace(' ', "_")
+        new_font.save()
+
+
+def get_fonts():
+    unsorted = tuple(font.as_json() for font in Font.objects.all())
+    return tuple(unsorted[i:i+2] for i in range(0, len(unsorted), 2))
 
 
 def hex_to_rgb(hex_code:str):
@@ -143,7 +197,7 @@ def hex_to_rgb(hex_code:str):
 def check_link_correct(link:str) -> bool:
     #TODO: перенести в более подходящее место
     link = link.replace('http://', '').replace('https://', '')
-    is_ok = re.search(r'^[A-Za-z0-9_-]+\.[a-zA-Z]', link)
+    is_ok = re.search(LINK_REGEX, link)
     if is_ok is None:
         return False
     return True

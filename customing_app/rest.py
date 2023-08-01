@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .decorators import profile_required, scheme_required
-from .models import Profile, ColorScheme, Link, check_link_correct
-from .forms import ProfileForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm, ChangeColorForm, ChangeFontForm, ChangeButtonForm, ProfilePicForm
+from .models import Profile, ColorScheme, Link, check_link_correct, Font
+from .forms import ProfileForm, LinkEditForm, DeleteLinkForm, NewLinkForm, LinkPosForm, ChangeColorForm, ChangeFontForm, ChangeButtonForm, ProfilePicForm, ChangeShapeForm
 
 from bs4 import BeautifulSoup
 from requests import get
@@ -175,10 +175,34 @@ def change_color(request):
 
 @login_required
 @scheme_required
+def get_new_font(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    if scheme is not None and scheme.font_name is not None:
+        return HttpResponse(json.dumps(scheme.font_name.as_json()), content_type="application/json")
+    else:
+        return HttpResponse(json.dumps(Font.objects.first().as_json()), content_type="application/json")
+
+
+@login_required
+@scheme_required
 def change_font(request):
     scheme = Profile.objects.filter(owner=request.user).first().colors
     cd = json.loads(request.body)
     form = ChangeColorForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        if scheme.set_font(cd['font_name']):
+            return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
+
+@login_required
+@scheme_required
+def change_font_type(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    cd = json.loads(request.body)
+    form = ChangeFontForm(cd)
 
     if form.is_valid():
         cd = form.cleaned_data
@@ -204,6 +228,23 @@ def change_button(request):
                 scheme.save()
                 return HttpResponse('OK')
     return HttpResponse('oksimiron', status=400)
+
+@login_required
+@scheme_required
+def change_shape(request):
+    scheme = Profile.objects.filter(owner=request.user).first().colors
+    cd = json.loads(request.body)
+    form = ChangeShapeForm(cd)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        shape = cd['shape']
+        if 0 <= shape <= 3:
+            scheme.avatar_shape = shape
+            scheme.save()
+            return HttpResponse('OK')
+    return HttpResponse('oksimiron', status=400)
+
 
 
 @profile_required

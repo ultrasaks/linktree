@@ -3,15 +3,25 @@
 
 {% block header %}
 
-<div class="popup hid" id="font-popup">
+<!-- <div class="popup hid" id="font-popup">
     <div class="card">
         <i class="ti ti-x card-icon close-btn" onclick="javascript:close_popups()"></i>
         <div class="card">Аа СПИСОК ШРИФТОВ</div>
     </div>
-</div>
+</div> -->
 
+<div id="popup" class="popup">
+    <div class="card">
+      <i class="ti ti-x card-icon close-btn" onclick="javascript:close_popup()"></i>
+      <div class="card">Аа СПИСОК ШРИФТОВ</div>
+    </div>
+  </div>
+<div class="popup-overlay"></div>
 
+{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/popup.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -35,8 +45,9 @@
     </div>
 </div>
 {% else %}
-<div class="outlined-selector"></div>
-<div class="card-list">
+<div class="outlined-selector" id="selector_1"></div>
+<div class="outlined-selector" id="selector_2"></div>
+<div class="card-list design-list">
     <h3>Профиль</h3>
     <div class="card">
         <div class="profile-top">
@@ -56,15 +67,21 @@
             <input type="text" placeholder="Имя" id="username" value="{{profile.name}}">
             <input type="text" placeholder="Описание" id="about" value="{{profile.about}}">
         </div>
-        <div class="profile-bottom">скругление
-            1 2 3
+        <style>
+            
+        </style>
+        <h4>Скругление</h4>
+        <div class="profile-bottom">
+            <div class="d base-circling" id="avatar_1">1</div>
+            <div class="d half-circling" id="avatar_2">2</div>
+            <div class="d full-circling" id="avatar_3">3</div>
         </div>
     </div>
 
 
     <h3>Фон</h3>
     <div class="card">
-        <div class="background-row">
+        <!-- <div class="background-row">
             <div class="background-chose"></div>
             <div class="background-chose"></div>
             <div class="background-chose"></div>
@@ -75,12 +92,12 @@
             <div class="background-chose"></div>
             <div class="background-chose"></div>
             <div class="background-chose"></div>
-        </div>
-        Цвет
+        </div> -->
+        <h4 class="t">Цвет</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="background-color-input" value="{{scheme.background}}">
             <div class="color-description">
-                <h6>Color</h6>
+                <h6>Цвет</h6>
                 <div class="color" id="background-color-input-text">{{scheme.background}}</div>
             </div>
         </div>
@@ -88,7 +105,7 @@
 
     <h3>Кнопки</h3>
     <div class="card">
-        <h4>Заливка</h4>
+        <h4 class="t">Заливка</h4>
         <div class="btn-row">
             <div class="s button btn-sample btn-sq" id="s1-1">&nbsp;</div>
             <div class="s button btn-sample btn-semi" id="s1-2">&nbsp;</div>
@@ -116,57 +133,68 @@
         <h4>Цвет тени</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="shadow-color-input" value="{{scheme.shadow}}">
-            <div class="color-description">
-                <h6>Color</h6>
+            <label class="color-description" for="shadow-color-input">
+                <h6>Цвет</h6>
                 <div class="color" id="shadow-color-input-text">{{scheme.shadow}}</div>
-            </div>
+            </label>
         </div>
 
         <h4>Цвет кнопки</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="button-color-input" value="{{scheme.button}}">
-            <div class="color-description">
-                <h6>Color</h6>
+            <label class="color-description" for="button-color-input">
+                <h6>Цвет</h6>
                 <div class="color" id="button-color-input-text">{{scheme.button}}</div>
-            </div>
+            </label>
         </div>
         
         <h4>Обводка кнопки</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="outline-color-input" value="{{scheme.outline}}">
-            <div class="color-description">
-                <h6>Color</h6>
+            <label class="color-description" for="outline-color-input">
+                <h6>Цвет</h6>
                 <div class="color" id="outline-color-input-text">{{scheme.outline}}</div>
-            </div>
+            </label>
         </div>
 
 
         <h4>Цвет текста</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="button-text-color-input" value="{{scheme.button_font}}">
-            <div class="color-description">
-                <h6>Color</h6>
+            <label class="color-description" for="button-text-color-input">
+                <h6>Цвет</h6>
                 <div class="color" id="button-text-color-input-text">{{scheme.button_font}}</div>
-            </div>
+            </label>
         </div>
     </div>
 
     <h3>Шрифты</h3>
     <div class="card">
-        Шрифт
-        <div class="color-wrapper">
-            <div class="font-square">Aa</div>
-            <div class="font-name">Raleway</div>
+        <style>
+            
+        </style>
+        <div class="color-popup-wrapper">
+        <h4 class="t">Шрифт</h4>
+            <div class="color-wrapper" id="color-wrapper">
+                <img class="font-square" id="font-input-square" src="/media/fonts/{{scheme.img_font}}.webp">
+                <div class="color-description font-text">
+                    <h6>Шрифт</h6>
+                    <div class="color" id="font-input-text">{{scheme.name_font}}</div>
+                </div>
+            </div>
+            <div class="showable flex">
+                <iframe src="/profile/design/fonts/"></iframe>
+                <a class="button" id="new_font">OK</a>
+            </div>
         </div>
 
-
-        Цвет
+        <h4>Цвет</h4>
         <div class="color-wrapper">
             <input type="color" class="colorsss" id="font-color-input" value="{{scheme.font}}">
-            <div class="color-description">
-                <h6>Color</h6>
+            <label class="color-description" for="font-color-input">
+                <h6>Цвет</h6>
                 <div class="color" id="font-color-input-text">{{scheme.font}}</div>
-            </div>
+            </label>
         </div>
     </div>
 </div>
@@ -178,10 +206,12 @@
 <script src="{% static 'scripts/colors_welcome.js' %}"></script>
 {% else %}
 {% csrf_token %}
+<script src="{% static 'scripts/preview_widget.js' %}"></script>
 <script src="{% static 'scripts/colors_edit.js' %}"></script>
 <script>
     changeButton(document.getElementById('s{{scheme.button_type}}-{{scheme.button_shape}}'), false);
-
+    changeShape(document.getElementById('avatar_{{scheme.avatar_shape}}'), false);
+    setTimeout(function () {document.querySelector('.showable').classList.remove('flex');document.querySelector('.showable').classList.add('hid')}, 700);
 </script>
 
 {% endif %}

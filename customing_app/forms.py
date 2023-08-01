@@ -33,9 +33,11 @@ class ChangeColorForm(forms.Form):
 class ChangeButtonForm(forms.Form):
     button_id = forms.CharField(max_length=4)
 
+class ChangeShapeForm(forms.Form):
+    shape = forms.IntegerField()
 
 class ChangeFontForm(forms.Form):
-    font_name = forms.CharField()
+    font_name = forms.CharField(max_length=8)
 
 
 class ProfilePicForm(forms.Form):

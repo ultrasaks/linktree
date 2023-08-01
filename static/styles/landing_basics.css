@@ -68,18 +68,18 @@ form .btn-outline {
     .landing-welcome {
         font-size: 300%;
     }
-    #block1 img {
+    .block img {
         width: 35vh;
         margin-top: 2rem;
     } 
-    #block1 {
+    .block {
         font-size: 1.5rem;
         flex-direction: column;
         margin-top: 2rem;
     }
 }
 
-#block1 {
+.block {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -87,7 +87,21 @@ form .btn-outline {
     font-size: 3rem;
     font-weight: 900;
     color: #211b03;
+    word-break: break-word;
 }
-#block1 img {
+.block img {
     width: 50vh;
+}
+@media (min-width: 800px) {
+    #b2 {
+        flex-direction: row-reverse;
+    }
+}
+footer {
+    justify-content: center;
+    display: flex;
+}
+footer a {
+    color: #c68a0c;
+    font-weight: 900;
 }
